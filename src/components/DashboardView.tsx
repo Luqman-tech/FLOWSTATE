@@ -3,7 +3,8 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { CalendarDays, CheckSquare, Clock, TrendingUp, Users, Target } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { CalendarDays, CheckSquare, Clock, TrendingUp, Users, Target, ArrowRight, Star, Zap } from 'lucide-react';
 
 export function DashboardView() {
   const stats = [
@@ -13,7 +14,8 @@ export function DashboardView() {
       change: "+12%",
       icon: CheckSquare,
       color: "text-blue-600",
-      bgColor: "bg-blue-100"
+      bgColor: "bg-blue-100",
+      trend: "up"
     },
     {
       title: "Completed Today",
@@ -21,7 +23,8 @@ export function DashboardView() {
       change: "+3",
       icon: Target,
       color: "text-green-600",
-      bgColor: "bg-green-100"
+      bgColor: "bg-green-100",
+      trend: "up"
     },
     {
       title: "Time Tracked",
@@ -29,7 +32,8 @@ export function DashboardView() {
       change: "+1.2h",
       icon: Clock,
       color: "text-purple-600",
-      bgColor: "bg-purple-100"
+      bgColor: "bg-purple-100",
+      trend: "up"
     },
     {
       title: "Team Members",
@@ -37,37 +41,108 @@ export function DashboardView() {
       change: "+2",
       icon: Users,
       color: "text-orange-600",
-      bgColor: "bg-orange-100"
+      bgColor: "bg-orange-100",
+      trend: "up"
     }
   ];
 
   const recentTasks = [
-    { id: 1, title: "Review project proposal", priority: "High", due: "Today", status: "In Progress" },
-    { id: 2, title: "Update documentation", priority: "Medium", due: "Tomorrow", status: "Pending" },
-    { id: 3, title: "Team meeting preparation", priority: "High", due: "Today", status: "Completed" },
-    { id: 4, title: "Client presentation", priority: "High", due: "Friday", status: "In Progress" },
+    { 
+      id: 1, 
+      title: "Review project proposal", 
+      priority: "High", 
+      due: "Today", 
+      status: "In Progress",
+      progress: 60,
+      assignee: "You"
+    },
+    { 
+      id: 2, 
+      title: "Update documentation", 
+      priority: "Medium", 
+      due: "Tomorrow", 
+      status: "Pending",
+      progress: 0,
+      assignee: "Sarah"
+    },
+    { 
+      id: 3, 
+      title: "Team meeting preparation", 
+      priority: "High", 
+      due: "Today", 
+      status: "Completed",
+      progress: 100,
+      assignee: "You"
+    },
+    { 
+      id: 4, 
+      title: "Client presentation", 
+      priority: "High", 
+      due: "Friday", 
+      status: "In Progress",
+      progress: 30,
+      assignee: "Team"
+    },
   ];
 
   const projects = [
-    { name: "Website Redesign", progress: 75, dueDate: "Dec 15", team: 5, status: "On Track" },
-    { name: "Mobile App", progress: 45, dueDate: "Jan 30", team: 8, status: "At Risk" },
-    { name: "Marketing Campaign", progress: 90, dueDate: "Dec 1", team: 3, status: "Ahead" },
+    { name: "Website Redesign", progress: 75, dueDate: "Dec 15", team: 5, status: "On Track", priority: "High" },
+    { name: "Mobile App", progress: 45, dueDate: "Jan 30", team: 8, status: "At Risk", priority: "High" },
+    { name: "Marketing Campaign", progress: 90, dueDate: "Dec 1", team: 3, status: "Ahead", priority: "Medium" },
+  ];
+
+  const quickActions = [
+    { title: "Create Task", icon: CheckSquare, color: "bg-blue-500" },
+    { title: "Schedule Meeting", icon: CalendarDays, color: "bg-purple-500" },
+    { title: "Track Time", icon: Clock, color: "bg-green-500" },
+    { title: "View Reports", icon: TrendingUp, color: "bg-orange-500" },
   ];
 
   return (
     <div className="space-y-6">
+      {/* Welcome Section */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-2xl shadow-lg">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold mb-2">Welcome back! 👋</h2>
+            <p className="text-blue-100">You have 8 tasks due today. Let's get productive!</p>
+          </div>
+          <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-white/20">
+            <Zap className="h-4 w-4 mr-2" />
+            Quick Start
+          </Button>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {quickActions.map((action, index) => (
+          <Card key={index} className="hover:shadow-lg transition-all duration-200 cursor-pointer group">
+            <CardContent className="p-4 text-center">
+              <div className={`${action.color} w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-200`}>
+                <action.icon className="h-6 w-6 text-white" />
+              </div>
+              <p className="font-medium text-gray-900">{action.title}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
-          <Card key={index} className="hover:shadow-lg transition-shadow duration-200">
+          <Card key={index} className="hover:shadow-lg transition-all duration-200 group">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                  <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-                  <p className="text-sm text-green-600 font-medium">{stat.change}</p>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
+                  <p className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</p>
+                  <div className="flex items-center">
+                    <span className="text-sm text-green-600 font-medium">{stat.change}</span>
+                    <TrendingUp className="h-3 w-3 text-green-600 ml-1" />
+                  </div>
                 </div>
-                <div className={`${stat.bgColor} p-3 rounded-full`}>
+                <div className={`${stat.bgColor} p-3 rounded-xl group-hover:scale-110 transition-transform duration-200`}>
                   <stat.icon className={`h-6 w-6 ${stat.color}`} />
                 </div>
               </div>
@@ -80,32 +155,50 @@ export function DashboardView() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Tasks */}
         <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <CheckSquare className="h-5 w-5 text-blue-600" />
-              <span>Recent Tasks</span>
-            </CardTitle>
-            <CardDescription>Your latest task activities</CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center space-x-2">
+                <CheckSquare className="h-5 w-5 text-blue-600" />
+                <span>Recent Tasks</span>
+              </CardTitle>
+              <CardDescription>Your latest task activities</CardDescription>
+            </div>
+            <Button variant="outline" size="sm">
+              View All
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {recentTasks.map((task) => (
-                <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900">{task.title}</h4>
-                    <div className="flex items-center space-x-4 mt-2">
-                      <Badge variant={task.priority === 'High' ? 'destructive' : 'secondary'}>
-                        {task.priority}
-                      </Badge>
-                      <span className="text-sm text-gray-500 flex items-center">
-                        <CalendarDays className="h-4 w-4 mr-1" />
-                        {task.due}
-                      </span>
+                <div key={task.id} className="p-4 border rounded-xl hover:bg-gray-50 transition-colors group">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">{task.title}</h4>
+                      <div className="flex items-center space-x-4 mt-2">
+                        <Badge variant={task.priority === 'High' ? 'destructive' : task.priority === 'Medium' ? 'default' : 'secondary'}>
+                          {task.priority}
+                        </Badge>
+                        <span className="text-sm text-gray-500 flex items-center">
+                          <CalendarDays className="h-4 w-4 mr-1" />
+                          {task.due}
+                        </span>
+                        <span className="text-sm text-gray-500">{task.assignee}</span>
+                      </div>
                     </div>
+                    <Badge variant={task.status === 'Completed' ? 'default' : task.status === 'In Progress' ? 'secondary' : 'outline'}>
+                      {task.status}
+                    </Badge>
                   </div>
-                  <Badge variant={task.status === 'Completed' ? 'default' : 'outline'}>
-                    {task.status}
-                  </Badge>
+                  {task.progress > 0 && (
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Progress</span>
+                        <span className="font-medium">{task.progress}%</span>
+                      </div>
+                      <Progress value={task.progress} className="h-2" />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -117,24 +210,32 @@ export function DashboardView() {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <TrendingUp className="h-5 w-5 text-purple-600" />
-              <span>Project Progress</span>
+              <span>Active Projects</span>
             </CardTitle>
             <CardDescription>Track your project milestones</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
               {projects.map((project, index) => (
-                <div key={index} className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-medium text-gray-900">{project.name}</h4>
-                    <Badge variant={
-                      project.status === 'On Track' ? 'default' : 
-                      project.status === 'Ahead' ? 'default' : 'destructive'
-                    }>
-                      {project.status}
-                    </Badge>
+                <div key={index} className="space-y-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-medium text-gray-900">{project.name}</h4>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <Badge variant={project.priority === 'High' ? 'destructive' : 'default'} className="text-xs">
+                          {project.priority}
+                        </Badge>
+                        <Badge variant={
+                          project.status === 'On Track' ? 'default' : 
+                          project.status === 'Ahead' ? 'default' : 'destructive'
+                        } className="text-xs">
+                          {project.status}
+                        </Badge>
+                      </div>
+                    </div>
+                    <Star className="h-4 w-4 text-gray-400 hover:text-yellow-500 cursor-pointer transition-colors" />
                   </div>
-                  <Progress value={project.progress} className="h-2" />
+                  <Progress value={project.progress} className="h-3" />
                   <div className="flex items-center justify-between text-sm text-gray-500">
                     <span>{project.progress}% complete</span>
                     <span>Due {project.dueDate}</span>
