@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -22,8 +21,8 @@ export function DashboardView() {
       value: "8",
       change: "+3",
       icon: Target,
-      color: "text-green-600",
-      bgColor: "bg-green-100",
+      color: "text-blue-700",
+      bgColor: "bg-blue-200",
       trend: "up"
     },
     {
@@ -31,8 +30,8 @@ export function DashboardView() {
       value: "6.5h",
       change: "+1.2h",
       icon: Clock,
-      color: "text-purple-600",
-      bgColor: "bg-purple-100",
+      color: "text-blue-800",
+      bgColor: "bg-blue-300",
       trend: "up"
     },
     {
@@ -40,8 +39,8 @@ export function DashboardView() {
       value: "12",
       change: "+2",
       icon: Users,
-      color: "text-orange-600",
-      bgColor: "bg-orange-100",
+      color: "text-blue-900",
+      bgColor: "bg-blue-400",
       trend: "up"
     }
   ];
@@ -93,15 +92,15 @@ export function DashboardView() {
 
   const quickActions = [
     { title: "Create Task", icon: CheckSquare, color: "bg-blue-500" },
-    { title: "Schedule Meeting", icon: CalendarDays, color: "bg-purple-500" },
-    { title: "Track Time", icon: Clock, color: "bg-green-500" },
-    { title: "View Reports", icon: TrendingUp, color: "bg-orange-500" },
+    { title: "Schedule Meeting", icon: CalendarDays, color: "bg-blue-600" },
+    { title: "Track Time", icon: Clock, color: "bg-blue-700" },
+    { title: "View Reports", icon: TrendingUp, color: "bg-blue-800" },
   ];
 
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-2xl shadow-lg">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6 rounded-2xl shadow-lg">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold mb-2">Welcome back! 👋</h2>
@@ -122,7 +121,7 @@ export function DashboardView() {
               <div className={`${action.color} w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-200`}>
                 <action.icon className="h-6 w-6 text-white" />
               </div>
-              <p className="font-medium text-gray-900">{action.title}</p>
+              <p className="font-medium text-blue-900">{action.title}</p>
             </CardContent>
           </Card>
         ))}
@@ -135,11 +134,11 @@ export function DashboardView() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
-                  <p className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</p>
+                  <p className="text-sm font-medium text-blue-600 mb-1">{stat.title}</p>
+                  <p className="text-3xl font-bold text-blue-900 mb-2">{stat.value}</p>
                   <div className="flex items-center">
-                    <span className="text-sm text-green-600 font-medium">{stat.change}</span>
-                    <TrendingUp className="h-3 w-3 text-green-600 ml-1" />
+                    <span className="text-sm text-blue-700 font-medium">{stat.change}</span>
+                    <TrendingUp className="h-3 w-3 text-blue-700 ml-1" />
                   </div>
                 </div>
                 <div className={`${stat.bgColor} p-3 rounded-xl group-hover:scale-110 transition-transform duration-200`}>
@@ -163,7 +162,7 @@ export function DashboardView() {
               </CardTitle>
               <CardDescription>Your latest task activities</CardDescription>
             </div>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="border-blue-200 hover:bg-blue-50">
               View All
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
@@ -171,30 +170,30 @@ export function DashboardView() {
           <CardContent>
             <div className="space-y-4">
               {recentTasks.map((task) => (
-                <div key={task.id} className="p-4 border rounded-xl hover:bg-gray-50 transition-colors group">
+                <div key={task.id} className="p-4 border border-blue-100 rounded-xl hover:bg-blue-50 transition-colors group">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
-                      <h4 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">{task.title}</h4>
+                      <h4 className="font-medium text-blue-900 group-hover:text-blue-700 transition-colors">{task.title}</h4>
                       <div className="flex items-center space-x-4 mt-2">
-                        <Badge variant={task.priority === 'High' ? 'destructive' : task.priority === 'Medium' ? 'default' : 'secondary'}>
+                        <Badge variant={task.priority === 'High' ? 'destructive' : task.priority === 'Medium' ? 'default' : 'secondary'} className={task.priority === 'High' ? 'bg-blue-600' : ''}>
                           {task.priority}
                         </Badge>
-                        <span className="text-sm text-gray-500 flex items-center">
+                        <span className="text-sm text-blue-600 flex items-center">
                           <CalendarDays className="h-4 w-4 mr-1" />
                           {task.due}
                         </span>
-                        <span className="text-sm text-gray-500">{task.assignee}</span>
+                        <span className="text-sm text-blue-600">{task.assignee}</span>
                       </div>
                     </div>
-                    <Badge variant={task.status === 'Completed' ? 'default' : task.status === 'In Progress' ? 'secondary' : 'outline'}>
+                    <Badge variant={task.status === 'Completed' ? 'default' : task.status === 'In Progress' ? 'secondary' : 'outline'} className={task.status === 'Completed' ? 'bg-blue-600' : ''}>
                       {task.status}
                     </Badge>
                   </div>
                   {task.progress > 0 && (
                     <div className="space-y-1">
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Progress</span>
-                        <span className="font-medium">{task.progress}%</span>
+                        <span className="text-blue-600">Progress</span>
+                        <span className="font-medium text-blue-900">{task.progress}%</span>
                       </div>
                       <Progress value={task.progress} className="h-2" />
                     </div>
@@ -209,7 +208,7 @@ export function DashboardView() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <TrendingUp className="h-5 w-5 text-purple-600" />
+              <TrendingUp className="h-5 w-5 text-blue-600" />
               <span>Active Projects</span>
             </CardTitle>
             <CardDescription>Track your project milestones</CardDescription>
@@ -217,30 +216,30 @@ export function DashboardView() {
           <CardContent>
             <div className="space-y-6">
               {projects.map((project, index) => (
-                <div key={index} className="space-y-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <div key={index} className="space-y-3 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-medium text-gray-900">{project.name}</h4>
+                      <h4 className="font-medium text-blue-900">{project.name}</h4>
                       <div className="flex items-center space-x-2 mt-1">
-                        <Badge variant={project.priority === 'High' ? 'destructive' : 'default'} className="text-xs">
+                        <Badge variant={project.priority === 'High' ? 'destructive' : 'default'} className={project.priority === 'High' ? 'bg-blue-600' : 'bg-blue-500'}>
                           {project.priority}
                         </Badge>
                         <Badge variant={
                           project.status === 'On Track' ? 'default' : 
                           project.status === 'Ahead' ? 'default' : 'destructive'
-                        } className="text-xs">
+                        } className={project.status !== 'At Risk' ? 'bg-blue-600' : ''}>
                           {project.status}
                         </Badge>
                       </div>
                     </div>
-                    <Star className="h-4 w-4 text-gray-400 hover:text-yellow-500 cursor-pointer transition-colors" />
+                    <Star className="h-4 w-4 text-blue-400 hover:text-blue-600 cursor-pointer transition-colors" />
                   </div>
                   <Progress value={project.progress} className="h-3" />
-                  <div className="flex items-center justify-between text-sm text-gray-500">
+                  <div className="flex items-center justify-between text-sm text-blue-600">
                     <span>{project.progress}% complete</span>
                     <span>Due {project.dueDate}</span>
                   </div>
-                  <div className="flex items-center text-sm text-gray-500">
+                  <div className="flex items-center text-sm text-blue-600">
                     <Users className="h-4 w-4 mr-1" />
                     {project.team} team members
                   </div>
