@@ -1,12 +1,15 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { DashboardView } from '@/components/DashboardView';
 import { TasksView } from '@/components/TasksView';
 import { ProjectsView } from '@/components/ProjectsView';
 import { CalendarView } from '@/components/CalendarView';
+import { TimeTrackingView } from '@/components/TimeTrackingView';
+import { GoalsView } from '@/components/GoalsView';
+import { TeamView } from '@/components/TeamView';
+import { SettingsView } from '@/components/SettingsView';
 import { Button } from '@/components/ui/button';
-import { Plus, Search, Bell, User, Settings } from 'lucide-react';
+import { Plus, Search, Bell, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 
@@ -14,11 +17,27 @@ export function MainContent() {
   const [activeView, setActiveView] = useState('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Listen for navigation events from sidebar
+  useEffect(() => {
+    const handleNavigationEvent = (event: CustomEvent) => {
+      if (event.detail && event.detail.viewId) {
+        setActiveView(event.detail.viewId);
+      }
+    };
+
+    window.addEventListener('navigate', handleNavigationEvent as EventListener);
+    return () => window.removeEventListener('navigate', handleNavigationEvent as EventListener);
+  }, []);
+
   const views = [
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
     { id: 'tasks', label: 'Tasks', icon: '✓', badge: '8' },
     { id: 'projects', label: 'Projects', icon: '📁', badge: '3' },
-    { id: 'calendar', label: 'Calendar', icon: '📅' }
+    { id: 'calendar', label: 'Calendar', icon: '📅' },
+    { id: 'time', label: 'Time Tracking', icon: '⏱️' },
+    { id: 'goals', label: 'Goals', icon: '🎯' },
+    { id: 'team', label: 'Team', icon: '👥' },
+    { id: 'settings', label: 'Settings', icon: '⚙️' }
   ];
 
   const renderActiveView = () => {
@@ -29,6 +48,14 @@ export function MainContent() {
         return <ProjectsView />;
       case 'calendar':
         return <CalendarView />;
+      case 'time':
+        return <TimeTrackingView />;
+      case 'goals':
+        return <GoalsView />;
+      case 'team':
+        return <TeamView />;
+      case 'settings':
+        return <SettingsView />;
       default:
         return <DashboardView />;
     }
@@ -44,6 +71,26 @@ export function MainContent() {
     if (hour < 12) return 'Good morning';
     if (hour < 17) return 'Good afternoon';
     return 'Good evening';
+  };
+
+  const handleQuickAdd = () => {
+    // Navigate to appropriate add form based on current view
+    switch (activeView) {
+      case 'tasks':
+        console.log('Opening task creation form...');
+        break;
+      case 'projects':
+        console.log('Opening project creation form...');
+        break;
+      case 'goals':
+        console.log('Opening goal creation form...');
+        break;
+      case 'team':
+        console.log('Opening team member invitation form...');
+        break;
+      default:
+        console.log('Opening quick add menu...');
+    }
   };
 
   return (
@@ -85,19 +132,28 @@ export function MainContent() {
               variant="outline" 
               size="sm"
               className="hidden lg:flex items-center space-x-2 hover:bg-blue-50 border-blue-200"
+              onClick={() => console.log('Opening notifications...')}
             >
               <Bell className="h-4 w-4" />
               <span className="hidden xl:inline">Notifications</span>
               <Badge variant="destructive" className="h-5 w-5 text-xs bg-blue-600">3</Badge>
             </Button>
 
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200">
+            <Button 
+              className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+              onClick={handleQuickAdd}
+            >
               <Plus className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Quick Add</span>
             </Button>
 
             {/* User Menu */}
-            <Button variant="outline" size="sm" className="rounded-full p-2 border-blue-200 hover:bg-blue-50">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="rounded-full p-2 border-blue-200 hover:bg-blue-50"
+              onClick={() => setActiveView('settings')}
+            >
               <User className="h-4 w-4" />
             </Button>
           </div>
@@ -143,6 +199,7 @@ export function MainContent() {
       <Button 
         className="fixed bottom-6 right-6 md:hidden bg-blue-600 hover:bg-blue-700 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 rounded-full h-14 w-14"
         size="icon"
+        onClick={handleQuickAdd}
       >
         <Plus className="h-6 w-6" />
       </Button>

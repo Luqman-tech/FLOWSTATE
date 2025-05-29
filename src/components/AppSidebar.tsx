@@ -32,6 +32,7 @@ const navigationItems = [
     url: "#dashboard",
     icon: BarChart3,
     description: "Overview & insights",
+    viewId: "dashboard"
   },
   {
     title: "Tasks",
@@ -39,6 +40,7 @@ const navigationItems = [
     icon: CheckSquare,
     description: "Manage your work",
     badge: "8",
+    viewId: "tasks"
   },
   {
     title: "Projects",
@@ -46,24 +48,28 @@ const navigationItems = [
     icon: Kanban,
     description: "Track progress",
     badge: "3",
+    viewId: "projects"
   },
   {
     title: "Calendar",
     url: "#calendar",
     icon: Calendar,
     description: "Schedule & events",
+    viewId: "calendar"
   },
   {
     title: "Time Tracking",
     url: "#time",
     icon: Clock,
     description: "Monitor productivity",
+    viewId: "time"
   },
   {
     title: "Goals",
     url: "#goals",
     icon: Target,
     description: "Set & achieve",
+    viewId: "goals"
   },
 ];
 
@@ -72,11 +78,13 @@ const quickActions = [
     title: "Quick Task",
     icon: Zap,
     color: "text-blue-600",
+    action: "task"
   },
   {
     title: "Achievements",
     icon: Award,
     color: "text-blue-800",
+    action: "achievements"
   },
 ];
 
@@ -86,16 +94,41 @@ const bottomItems = [
     url: "#team",
     icon: Users,
     description: "Collaborate together",
+    viewId: "team"
   },
   {
     title: "Settings",
     url: "#settings",
     icon: Settings,
     description: "Customize your workspace",
+    viewId: "settings"
   },
 ];
 
 export function AppSidebar() {
+  const handleNavigation = (viewId: string) => {
+    // Dispatch custom event to communicate with MainContent
+    window.dispatchEvent(new CustomEvent('navigate', { detail: { viewId } }));
+  };
+
+  const handleQuickAction = (action: string) => {
+    console.log(`Quick action: ${action}`);
+    if (action === 'task') {
+      handleNavigation('tasks');
+    }
+  };
+
+  // Listen for navigation events in MainContent
+  React.useEffect(() => {
+    const handleNavigationEvent = (event: CustomEvent) => {
+      // This could be used to update sidebar state if needed
+      console.log('Navigation event received:', event.detail);
+    };
+
+    window.addEventListener('navigate', handleNavigationEvent as EventListener);
+    return () => window.removeEventListener('navigate', handleNavigationEvent as EventListener);
+  }, []);
+
   return (
     <Sidebar className="border-r-0 shadow-xl bg-white">
       <SidebarHeader className="border-b px-6 py-5 bg-gradient-to-r from-blue-50 to-blue-100">
@@ -123,6 +156,7 @@ export function AppSidebar() {
               {quickActions.map((action) => (
                 <button
                   key={action.title}
+                  onClick={() => handleQuickAction(action.action)}
                   className="p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors duration-200 flex flex-col items-center space-y-1"
                 >
                   <action.icon className={`h-5 w-5 ${action.color}`} />
@@ -146,7 +180,10 @@ export function AppSidebar() {
                     asChild 
                     className="hover:bg-blue-50 hover:text-blue-800 transition-all duration-200 rounded-xl mb-1 group"
                   >
-                    <a href={item.url} className="flex items-center justify-between px-3 py-3">
+                    <button 
+                      onClick={() => handleNavigation(item.viewId)}
+                      className="flex items-center justify-between px-3 py-3 w-full text-left"
+                    >
                       <div className="flex items-center space-x-3">
                         <item.icon className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
                         <div className="flex flex-col">
@@ -161,7 +198,7 @@ export function AppSidebar() {
                           {item.badge}
                         </Badge>
                       )}
-                    </a>
+                    </button>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -192,13 +229,16 @@ export function AppSidebar() {
                 asChild 
                 className="hover:bg-blue-100 transition-all duration-200 rounded-lg group"
               >
-                <a href={item.url} className="flex items-center space-x-3 px-3 py-2">
+                <button 
+                  onClick={() => handleNavigation(item.viewId)}
+                  className="flex items-center space-x-3 px-3 py-2 w-full text-left"
+                >
                   <item.icon className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
                   <div className="flex flex-col">
                     <span className="font-medium">{item.title}</span>
                     <span className="text-xs text-blue-600">{item.description}</span>
                   </div>
-                </a>
+                </button>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
