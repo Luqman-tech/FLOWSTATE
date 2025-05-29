@@ -14,6 +14,8 @@ import { Plus, Search, Bell, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { CreateTaskDialog } from '@/components/CreateTaskDialog';
+import { CreateProjectDialog } from '@/components/CreateProjectDialog';
 
 export function MainContent() {
   const [activeView, setActiveView] = useState('dashboard');
@@ -76,38 +78,48 @@ export function MainContent() {
     return 'Good evening';
   };
 
-  const handleQuickAdd = () => {
-    // Navigate to appropriate add form based on current view
+  const renderQuickAddButton = () => {
     switch (activeView) {
       case 'tasks':
-        toast({
-          title: "Create New Task",
-          description: "Opening task creation form...",
-        });
-        break;
+        return (
+          <CreateTaskDialog
+            trigger={
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200">
+                <Plus className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Quick Add</span>
+                <span className="sm:hidden">Add</span>
+              </Button>
+            }
+          />
+        );
       case 'projects':
-        toast({
-          title: "Create New Project",
-          description: "Opening project creation form...",
-        });
-        break;
-      case 'goals':
-        toast({
-          title: "Create New Goal",
-          description: "Opening goal creation form...",
-        });
-        break;
-      case 'team':
-        toast({
-          title: "Invite Team Member",
-          description: "Opening team member invitation form...",
-        });
-        break;
+        return (
+          <CreateProjectDialog
+            trigger={
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200">
+                <Plus className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Quick Add</span>
+                <span className="sm:hidden">Add</span>
+              </Button>
+            }
+          />
+        );
       default:
-        toast({
-          title: "Quick Add",
-          description: "Select what you'd like to create...",
-        });
+        return (
+          <Button 
+            className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+            onClick={() => {
+              toast({
+                title: "Quick Add",
+                description: "Select what you'd like to create...",
+              });
+            }}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">Quick Add</span>
+            <span className="sm:hidden">Add</span>
+          </Button>
+        );
     }
   };
 
@@ -133,36 +145,48 @@ export function MainContent() {
     }
   };
 
+  // Listen for navigation events from sidebar
+  useEffect(() => {
+    const handleNavigationEvent = (event: CustomEvent) => {
+      if (event.detail && event.detail.viewId) {
+        setActiveView(event.detail.viewId);
+      }
+    };
+
+    window.addEventListener('navigate', handleNavigationEvent as EventListener);
+    return () => window.removeEventListener('navigate', handleNavigationEvent as EventListener);
+  }, []);
+
   return (
     <main className="flex-1 flex flex-col bg-blue-50/30">
-      {/* Enhanced Header */}
+      {/* Enhanced Header - Mobile Optimized */}
       <header className="border-b bg-white/95 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
-        <div className="flex items-center justify-between p-4 lg:px-6">
-          <div className="flex items-center space-x-4">
+        <div className="flex items-center justify-between p-3 md:p-4 lg:px-6">
+          <div className="flex items-center space-x-3 md:space-x-4 flex-1 min-w-0">
             <SidebarTrigger className="hover:bg-blue-100 transition-colors rounded-lg p-2" />
-            <div className="flex flex-col">
-              <h1 className="text-2xl font-bold text-blue-900">
+            <div className="flex flex-col min-w-0">
+              <h1 className="text-lg md:text-2xl font-bold text-blue-900 truncate">
                 {getViewTitle()}
               </h1>
-              <p className="text-sm text-blue-600 hidden sm:block">
+              <p className="text-xs md:text-sm text-blue-600 hidden sm:block">
                 {getWelcomeMessage()}, let's make today productive!
               </p>
             </div>
           </div>
           
-          <div className="flex items-center space-x-3">
-            {/* Smart Search */}
-            <div className="relative hidden md:block">
+          <div className="flex items-center space-x-2 md:space-x-3">
+            {/* Smart Search - Hidden on small screens */}
+            <div className="relative hidden lg:block">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400 h-4 w-4" />
               <Input 
                 placeholder="Search everything..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={handleSearchKeyPress}
-                className="pl-10 w-72 bg-blue-50 border-blue-200 focus:bg-white focus:border-blue-400 transition-colors"
+                className="pl-10 w-64 xl:w-72 bg-blue-50 border-blue-200 focus:bg-white focus:border-blue-400 transition-colors"
               />
               {searchQuery && (
-                <div className="absolute top-full mt-1 w-full bg-white border border-blue-200 rounded-lg shadow-lg p-2">
+                <div className="absolute top-full mt-1 w-full bg-white border border-blue-200 rounded-lg shadow-lg p-2 z-50">
                   <button 
                     onClick={handleSearch}
                     className="text-sm text-blue-600 hover:text-blue-800 w-full text-left"
@@ -173,25 +197,20 @@ export function MainContent() {
               )}
             </div>
 
-            {/* Quick Actions */}
+            {/* Notifications - Hidden on mobile */}
             <Button 
               variant="outline" 
               size="sm"
-              className="hidden lg:flex items-center space-x-2 hover:bg-blue-50 border-blue-200"
+              className="hidden md:flex items-center space-x-2 hover:bg-blue-50 border-blue-200"
               onClick={handleNotifications}
             >
               <Bell className="h-4 w-4" />
-              <span className="hidden xl:inline">Notifications</span>
+              <span className="hidden lg:inline">Notifications</span>
               <Badge variant="destructive" className="h-5 w-5 text-xs bg-blue-600">3</Badge>
             </Button>
 
-            <Button 
-              className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-              onClick={handleQuickAdd}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Quick Add</span>
-            </Button>
+            {/* Quick Add - Context Aware */}
+            {renderQuickAddButton()}
 
             {/* User Menu */}
             <Button 
@@ -206,25 +225,28 @@ export function MainContent() {
         </div>
       </header>
 
-      {/* Enhanced Navigation Tabs */}
+      {/* Enhanced Navigation Tabs - Mobile Optimized */}
       <div className="border-b bg-white border-blue-200">
-        <nav className="flex space-x-1 px-4 lg:px-6 overflow-x-auto">
+        <nav className="flex space-x-1 px-3 md:px-4 lg:px-6 overflow-x-auto scrollbar-hide">
           {views.map((view) => (
             <button
               key={view.id}
               onClick={() => setActiveView(view.id)}
-              className={`flex items-center space-x-2 py-3 px-4 border-b-2 font-medium text-sm transition-all duration-200 whitespace-nowrap ${
+              className={`flex items-center space-x-1 md:space-x-2 py-2 md:py-3 px-2 md:px-4 border-b-2 font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap ${
                 activeView === view.id
                   ? 'border-blue-500 text-blue-700 bg-blue-50/70'
                   : 'border-transparent text-blue-600 hover:text-blue-800 hover:border-blue-300 hover:bg-blue-50/50'
               }`}
             >
-              <span className="text-base">{view.icon}</span>
-              <span>{view.label}</span>
+              <span className="text-sm md:text-base">{view.icon}</span>
+              <span className="hidden sm:inline">{view.label}</span>
+              <span className="sm:hidden">
+                {view.label.split(' ')[0]}
+              </span>
               {view.badge && (
                 <Badge 
                   variant={activeView === view.id ? "default" : "secondary"} 
-                  className={`h-5 text-xs ${activeView === view.id ? 'bg-blue-600' : 'bg-blue-200 text-blue-700'}`}
+                  className={`h-4 md:h-5 text-xs ${activeView === view.id ? 'bg-blue-600' : 'bg-blue-200 text-blue-700'}`}
                 >
                   {view.badge}
                 </Badge>
@@ -234,21 +256,52 @@ export function MainContent() {
         </nav>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 p-4 lg:p-6 overflow-auto">
+      {/* Main Content Area - Mobile Optimized */}
+      <div className="flex-1 p-3 md:p-4 lg:p-6 overflow-auto">
         <div className="max-w-7xl mx-auto">
           {renderActiveView()}
         </div>
       </div>
 
-      {/* Floating Action Button for Mobile */}
-      <Button 
-        className="fixed bottom-6 right-6 md:hidden bg-blue-600 hover:bg-blue-700 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 rounded-full h-14 w-14"
-        size="icon"
-        onClick={handleQuickAdd}
-      >
-        <Plus className="h-6 w-6" />
-      </Button>
+      {/* Floating Action Button for Mobile - Context Aware */}
+      <div className="fixed bottom-6 right-6 md:hidden">
+        {activeView === 'tasks' ? (
+          <CreateTaskDialog
+            trigger={
+              <Button 
+                className="bg-blue-600 hover:bg-blue-700 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 rounded-full h-14 w-14"
+                size="icon"
+              >
+                <Plus className="h-6 w-6" />
+              </Button>
+            }
+          />
+        ) : activeView === 'projects' ? (
+          <CreateProjectDialog
+            trigger={
+              <Button 
+                className="bg-blue-600 hover:bg-blue-700 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 rounded-full h-14 w-14"
+                size="icon"
+              >
+                <Plus className="h-6 w-6" />
+              </Button>
+            }
+          />
+        ) : (
+          <Button 
+            className="bg-blue-600 hover:bg-blue-700 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 rounded-full h-14 w-14"
+            size="icon"
+            onClick={() => {
+              toast({
+                title: "Quick Add",
+                description: "Select what you'd like to create...",
+              });
+            }}
+          >
+            <Plus className="h-6 w-6" />
+          </Button>
+        )}
+      </div>
     </main>
   );
 }
