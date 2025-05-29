@@ -1,11 +1,15 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, CheckSquare, Clock, TrendingUp, Users, Target, ArrowRight, Star, Zap } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export function DashboardView() {
+  const { toast } = useToast();
+
   const stats = [
     {
       title: "Active Tasks",
@@ -91,11 +95,68 @@ export function DashboardView() {
   ];
 
   const quickActions = [
-    { title: "Create Task", icon: CheckSquare, color: "bg-blue-500" },
-    { title: "Schedule Meeting", icon: CalendarDays, color: "bg-blue-600" },
-    { title: "Track Time", icon: Clock, color: "bg-blue-700" },
-    { title: "View Reports", icon: TrendingUp, color: "bg-blue-800" },
+    { title: "Create Task", icon: CheckSquare, color: "bg-blue-500", action: "task" },
+    { title: "Schedule Meeting", icon: CalendarDays, color: "bg-blue-600", action: "meeting" },
+    { title: "Track Time", icon: Clock, color: "bg-blue-700", action: "time" },
+    { title: "View Reports", icon: TrendingUp, color: "bg-blue-800", action: "reports" },
   ];
+
+  const handleQuickAction = (action: string) => {
+    switch (action) {
+      case 'task':
+        // Navigate to tasks view
+        window.dispatchEvent(new CustomEvent('navigate', { detail: { viewId: 'tasks' } }));
+        toast({
+          title: "Create Task",
+          description: "Navigating to tasks page...",
+        });
+        break;
+      case 'meeting':
+        // Navigate to calendar view
+        window.dispatchEvent(new CustomEvent('navigate', { detail: { viewId: 'calendar' } }));
+        toast({
+          title: "Schedule Meeting",
+          description: "Navigating to calendar page...",
+        });
+        break;
+      case 'time':
+        // Navigate to time tracking view
+        window.dispatchEvent(new CustomEvent('navigate', { detail: { viewId: 'time' } }));
+        toast({
+          title: "Track Time",
+          description: "Navigating to time tracking page...",
+        });
+        break;
+      case 'reports':
+        toast({
+          title: "View Reports",
+          description: "Opening reports dashboard...",
+        });
+        break;
+    }
+  };
+
+  const handleQuickStart = () => {
+    toast({
+      title: "Quick Start",
+      description: "Starting your productivity session...",
+    });
+  };
+
+  const handleViewAllTasks = () => {
+    window.dispatchEvent(new CustomEvent('navigate', { detail: { viewId: 'tasks' } }));
+    toast({
+      title: "View All Tasks",
+      description: "Navigating to tasks page...",
+    });
+  };
+
+  const handleStarProject = (projectName: string) => {
+    toast({
+      title: "Project Starred",
+      description: `${projectName} has been added to favorites`,
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -106,7 +167,11 @@ export function DashboardView() {
             <h2 className="text-2xl font-bold mb-2">Welcome back! 👋</h2>
             <p className="text-blue-100">You have 8 tasks due today. Let's get productive!</p>
           </div>
-          <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-white/20">
+          <Button 
+            variant="secondary" 
+            className="bg-white/20 hover:bg-white/30 text-white border-white/20"
+            onClick={handleQuickStart}
+          >
             <Zap className="h-4 w-4 mr-2" />
             Quick Start
           </Button>
@@ -116,7 +181,11 @@ export function DashboardView() {
       {/* Quick Actions */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {quickActions.map((action, index) => (
-          <Card key={index} className="hover:shadow-lg transition-all duration-200 cursor-pointer group">
+          <Card 
+            key={index} 
+            className="hover:shadow-lg transition-all duration-200 cursor-pointer group"
+            onClick={() => handleQuickAction(action.action)}
+          >
             <CardContent className="p-4 text-center">
               <div className={`${action.color} w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-200`}>
                 <action.icon className="h-6 w-6 text-white" />
@@ -162,7 +231,12 @@ export function DashboardView() {
               </CardTitle>
               <CardDescription>Your latest task activities</CardDescription>
             </div>
-            <Button variant="outline" size="sm" className="border-blue-200 hover:bg-blue-50">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="border-blue-200 hover:bg-blue-50"
+              onClick={handleViewAllTasks}
+            >
               View All
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
@@ -232,7 +306,10 @@ export function DashboardView() {
                         </Badge>
                       </div>
                     </div>
-                    <Star className="h-4 w-4 text-blue-400 hover:text-blue-600 cursor-pointer transition-colors" />
+                    <Star 
+                      className="h-4 w-4 text-blue-400 hover:text-blue-600 cursor-pointer transition-colors" 
+                      onClick={() => handleStarProject(project.name)}
+                    />
                   </div>
                   <Progress value={project.progress} className="h-3" />
                   <div className="flex items-center justify-between text-sm text-blue-600">

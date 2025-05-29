@@ -25,6 +25,7 @@ import {
   Zap,
   Award
 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const navigationItems = [
   {
@@ -106,15 +107,30 @@ const bottomItems = [
 ];
 
 export function AppSidebar() {
+  const { toast } = useToast();
+
   const handleNavigation = (viewId: string) => {
     // Dispatch custom event to communicate with MainContent
     window.dispatchEvent(new CustomEvent('navigate', { detail: { viewId } }));
+    toast({
+      title: "Navigation",
+      description: `Switched to ${viewId.charAt(0).toUpperCase() + viewId.slice(1)} view`,
+    });
   };
 
   const handleQuickAction = (action: string) => {
     console.log(`Quick action: ${action}`);
     if (action === 'task') {
       handleNavigation('tasks');
+      toast({
+        title: "Quick Task",
+        description: "Creating a new task...",
+      });
+    } else if (action === 'achievements') {
+      toast({
+        title: "Achievements",
+        description: "Viewing your achievements...",
+      });
     }
   };
 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { DashboardView } from '@/components/DashboardView';
@@ -12,10 +13,12 @@ import { Button } from '@/components/ui/button';
 import { Plus, Search, Bell, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 
 export function MainContent() {
   const [activeView, setActiveView] = useState('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
+  const { toast } = useToast();
 
   // Listen for navigation events from sidebar
   useEffect(() => {
@@ -77,19 +80,56 @@ export function MainContent() {
     // Navigate to appropriate add form based on current view
     switch (activeView) {
       case 'tasks':
-        console.log('Opening task creation form...');
+        toast({
+          title: "Create New Task",
+          description: "Opening task creation form...",
+        });
         break;
       case 'projects':
-        console.log('Opening project creation form...');
+        toast({
+          title: "Create New Project",
+          description: "Opening project creation form...",
+        });
         break;
       case 'goals':
-        console.log('Opening goal creation form...');
+        toast({
+          title: "Create New Goal",
+          description: "Opening goal creation form...",
+        });
         break;
       case 'team':
-        console.log('Opening team member invitation form...');
+        toast({
+          title: "Invite Team Member",
+          description: "Opening team member invitation form...",
+        });
         break;
       default:
-        console.log('Opening quick add menu...');
+        toast({
+          title: "Quick Add",
+          description: "Select what you'd like to create...",
+        });
+    }
+  };
+
+  const handleNotifications = () => {
+    toast({
+      title: "Notifications",
+      description: "You have 3 new notifications",
+    });
+  };
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      toast({
+        title: "Search",
+        description: `Searching for "${searchQuery}"...`,
+      });
+    }
+  };
+
+  const handleSearchKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
     }
   };
 
@@ -118,11 +158,17 @@ export function MainContent() {
                 placeholder="Search everything..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={handleSearchKeyPress}
                 className="pl-10 w-72 bg-blue-50 border-blue-200 focus:bg-white focus:border-blue-400 transition-colors"
               />
               {searchQuery && (
                 <div className="absolute top-full mt-1 w-full bg-white border border-blue-200 rounded-lg shadow-lg p-2">
-                  <p className="text-sm text-blue-600">Press Enter to search</p>
+                  <button 
+                    onClick={handleSearch}
+                    className="text-sm text-blue-600 hover:text-blue-800 w-full text-left"
+                  >
+                    Press Enter to search for "{searchQuery}"
+                  </button>
                 </div>
               )}
             </div>
@@ -132,7 +178,7 @@ export function MainContent() {
               variant="outline" 
               size="sm"
               className="hidden lg:flex items-center space-x-2 hover:bg-blue-50 border-blue-200"
-              onClick={() => console.log('Opening notifications...')}
+              onClick={handleNotifications}
             >
               <Bell className="h-4 w-4" />
               <span className="hidden xl:inline">Notifications</span>
