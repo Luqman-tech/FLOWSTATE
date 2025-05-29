@@ -150,11 +150,11 @@ export function AppSidebar() {
       <SidebarHeader className="border-b px-6 py-5 bg-gradient-to-r from-blue-50 to-blue-100">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-            <span className="text-white font-bold text-lg">H</span>
+            <span className="text-white font-bold text-lg">F</span>
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-lg text-blue-800">
-              Horizon Work Studio
+              FlowState
             </span>
             <span className="text-xs text-blue-600">Your productivity hub</span>
           </div>
