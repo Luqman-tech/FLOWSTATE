@@ -36,8 +36,8 @@ export function MainContent() {
 
   const views = [
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-    { id: 'tasks', label: 'Tasks', icon: '✓', badge: '8' },
-    { id: 'projects', label: 'Projects', icon: '📁', badge: '3' },
+    { id: 'tasks', label: 'Tasks', icon: '✓' },
+    { id: 'projects', label: 'Projects', icon: '📁' },
     { id: 'calendar', label: 'Calendar', icon: '📅' },
     { id: 'time', label: 'Time Tracking', icon: '⏱️' },
     { id: 'goals', label: 'Goals', icon: '🎯' },
@@ -126,7 +126,7 @@ export function MainContent() {
   const handleNotifications = () => {
     toast({
       title: "Notifications",
-      description: "You have 3 new notifications",
+      description: "No new notifications",
     });
   };
 
@@ -206,7 +206,7 @@ export function MainContent() {
             >
               <Bell className="h-4 w-4" />
               <span className="hidden lg:inline">Notifications</span>
-              <Badge variant="destructive" className="h-5 w-5 text-xs bg-blue-600">3</Badge>
+              <Badge variant="destructive" className="h-5 w-5 text-xs bg-blue-600">0</Badge>
             </Button>
 
             {/* Quick Add - Context Aware */}
@@ -243,14 +243,6 @@ export function MainContent() {
               <span className="sm:hidden">
                 {view.label.split(' ')[0]}
               </span>
-              {view.badge && (
-                <Badge 
-                  variant={activeView === view.id ? "default" : "secondary"} 
-                  className={`h-4 md:h-5 text-xs ${activeView === view.id ? 'bg-blue-600' : 'bg-blue-200 text-blue-700'}`}
-                >
-                  {view.badge}
-                </Badge>
-              )}
             </button>
           ))}
         </nav>

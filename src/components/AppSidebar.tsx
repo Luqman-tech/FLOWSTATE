@@ -40,7 +40,6 @@ const navigationItems = [
     url: "#tasks",
     icon: CheckSquare,
     description: "Manage your work",
-    badge: "8",
     viewId: "tasks"
   },
   {
@@ -48,7 +47,6 @@ const navigationItems = [
     url: "#projects",
     icon: Kanban,
     description: "Track progress",
-    badge: "3",
     viewId: "projects"
   },
   {
@@ -209,11 +207,6 @@ export function AppSidebar() {
                           </span>
                         </div>
                       </div>
-                      {item.badge && (
-                        <Badge variant="secondary" className="h-5 text-xs bg-blue-200 text-blue-700">
-                          {item.badge}
-                        </Badge>
-                      )}
                     </button>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -227,12 +220,12 @@ export function AppSidebar() {
           <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-blue-800">Today's Progress</span>
-              <span className="text-sm font-bold text-blue-700">75%</span>
+              <span className="text-sm font-bold text-blue-700">0%</span>
             </div>
             <div className="w-full bg-blue-200 rounded-full h-2">
-              <div className="bg-blue-600 h-2 rounded-full" style={{width: '75%'}}></div>
+              <div className="bg-blue-600 h-2 rounded-full" style={{width: '0%'}}></div>
             </div>
-            <p className="text-xs text-blue-600 mt-2">6 of 8 tasks completed</p>
+            <p className="text-xs text-blue-600 mt-2">0 of 0 tasks completed</p>
           </div>
         </SidebarGroup>
       </SidebarContent>

@@ -11,63 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CreateTaskDialog } from '@/components/CreateTaskDialog';
 
 export function TasksView() {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Design new landing page",
-      description: "Create mockups and wireframes for the new product landing page",
-      priority: "High",
-      status: "In Progress",
-      assignee: "Sarah Chen",
-      dueDate: "2025-01-15",
-      tags: ["Design", "Frontend"],
-      completed: false
-    },
-    {
-      id: 2,
-      title: "Implement user authentication",
-      description: "Add login, logout, and registration functionality",
-      priority: "High",
-      status: "To Do",
-      assignee: "Alex Kumar",
-      dueDate: "2025-01-20",
-      tags: ["Backend", "Security"],
-      completed: false
-    },
-    {
-      id: 3,
-      title: "Write API documentation",
-      description: "Document all REST API endpoints with examples",
-      priority: "Medium",
-      status: "In Progress",
-      assignee: "Maria Rodriguez",
-      dueDate: "2025-01-18",
-      tags: ["Documentation", "API"],
-      completed: false
-    },
-    {
-      id: 4,
-      title: "Setup CI/CD pipeline",
-      description: "Configure automated testing and deployment",
-      priority: "Medium",
-      status: "Completed",
-      assignee: "John Smith",
-      dueDate: "2025-01-10",
-      tags: ["DevOps", "Automation"],
-      completed: true
-    },
-    {
-      id: 5,
-      title: "User feedback analysis",
-      description: "Analyze customer feedback from last quarter",
-      priority: "Low",
-      status: "To Do",
-      assignee: "Emily Davis",
-      dueDate: "2025-01-25",
-      tags: ["Research", "Analysis"],
-      completed: false
-    }
-  ]);
+  const [tasks, setTasks] = useState([]);
 
   const toggleTask = (taskId: number) => {
     setTasks(tasks.map(task => 
@@ -175,27 +119,66 @@ export function TasksView() {
         </TabsList>
 
         <TabsContent value="all" className="space-y-3 md:space-y-4 mt-4 md:mt-6">
-          {tasks.map((task) => (
-            <TaskCard key={task.id} task={task} onToggle={toggleTask} />
-          ))}
+          {tasks.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-gray-400 mb-4">
+                <svg className="mx-auto h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No tasks yet</h3>
+              <p className="text-gray-500 mb-4">Get started by creating your first task</p>
+              <CreateTaskDialog
+                trigger={
+                  <Button className="bg-blue-600 hover:bg-blue-700">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Your First Task
+                  </Button>
+                }
+                onTaskCreated={handleTaskCreated}
+              />
+            </div>
+          ) : (
+            tasks.map((task) => (
+              <TaskCard key={task.id} task={task} onToggle={toggleTask} />
+            ))
+          )}
         </TabsContent>
 
         <TabsContent value="to_do" className="space-y-3 md:space-y-4 mt-4 md:mt-6">
-          {filterTasksByStatus('to_do').map((task) => (
-            <TaskCard key={task.id} task={task} onToggle={toggleTask} />
-          ))}
+          {filterTasksByStatus('to_do').length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-500">No tasks in To Do</p>
+            </div>
+          ) : (
+            filterTasksByStatus('to_do').map((task) => (
+              <TaskCard key={task.id} task={task} onToggle={toggleTask} />
+            ))
+          )}
         </TabsContent>
 
         <TabsContent value="in_progress" className="space-y-3 md:space-y-4 mt-4 md:mt-6">
-          {filterTasksByStatus('in_progress').map((task) => (
-            <TaskCard key={task.id} task={task} onToggle={toggleTask} />
-          ))}
+          {filterTasksByStatus('in_progress').length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-500">No tasks in progress</p>
+            </div>
+          ) : (
+            filterTasksByStatus('in_progress').map((task) => (
+              <TaskCard key={task.id} task={task} onToggle={toggleTask} />
+            ))
+          )}
         </TabsContent>
 
         <TabsContent value="completed" className="space-y-3 md:space-y-4 mt-4 md:mt-6">
-          {filterTasksByStatus('completed').map((task) => (
-            <TaskCard key={task.id} task={task} onToggle={toggleTask} />
-          ))}
+          {filterTasksByStatus('completed').length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-500">No completed tasks</p>
+            </div>
+          ) : (
+            filterTasksByStatus('completed').map((task) => (
+              <TaskCard key={task.id} task={task} onToggle={toggleTask} />
+            ))
+          )}
         </TabsContent>
       </Tabs>
     </div>

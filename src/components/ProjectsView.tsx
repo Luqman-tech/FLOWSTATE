@@ -8,79 +8,7 @@ import { Plus, Calendar, Users, MoreHorizontal, Target, TrendingUp } from 'lucid
 import { CreateProjectDialog } from '@/components/CreateProjectDialog';
 
 export function ProjectsView() {
-  const [projects, setProjects] = useState([
-    {
-      id: 1,
-      name: "E-commerce Platform Redesign",
-      description: "Complete overhaul of the shopping experience with new UI/UX",
-      status: "In Progress",
-      progress: 65,
-      startDate: "2024-12-01",
-      endDate: "2025-02-15",
-      teamMembers: [
-        { name: "Sarah Chen", avatar: "SC" },
-        { name: "Alex Kumar", avatar: "AK" },
-        { name: "Maria Rodriguez", avatar: "MR" },
-        { name: "John Smith", avatar: "JS" }
-      ],
-      tasks: { total: 24, completed: 16 },
-      budget: { allocated: 50000, spent: 32000 },
-      priority: "High",
-      tags: ["Frontend", "UX/UI", "E-commerce"]
-    },
-    {
-      id: 2,
-      name: "Mobile App Development",
-      description: "Native iOS and Android app for customer engagement",
-      status: "Planning",
-      progress: 25,
-      startDate: "2025-01-15",
-      endDate: "2025-06-30",
-      teamMembers: [
-        { name: "Emily Davis", avatar: "ED" },
-        { name: "Michael Brown", avatar: "MB" },
-        { name: "Lisa Wang", avatar: "LW" }
-      ],
-      tasks: { total: 45, completed: 8 },
-      budget: { allocated: 75000, spent: 15000 },
-      priority: "High",
-      tags: ["Mobile", "React Native", "API"]
-    },
-    {
-      id: 3,
-      name: "Data Analytics Dashboard",
-      description: "Real-time analytics and reporting system for business insights",
-      status: "In Progress",
-      progress: 80,
-      startDate: "2024-11-01",
-      endDate: "2025-01-31",
-      teamMembers: [
-        { name: "David Wilson", avatar: "DW" },
-        { name: "Anna Martinez", avatar: "AM" }
-      ],
-      tasks: { total: 18, completed: 14 },
-      budget: { allocated: 30000, spent: 24000 },
-      priority: "Medium",
-      tags: ["Analytics", "Dashboard", "Data Viz"]
-    },
-    {
-      id: 4,
-      name: "Customer Support Portal",
-      description: "Self-service portal with chatbot and knowledge base",
-      status: "Completed",
-      progress: 100,
-      startDate: "2024-09-01",
-      endDate: "2024-12-15",
-      teamMembers: [
-        { name: "Robert Kim", avatar: "RK" },
-        { name: "Sophie Turner", avatar: "ST" }
-      ],
-      tasks: { total: 22, completed: 22 },
-      budget: { allocated: 40000, spent: 38000 },
-      priority: "Medium",
-      tags: ["Support", "Chatbot", "Knowledge Base"]
-    }
-  ]);
+  const [projects, setProjects] = useState([]);
 
   const handleProjectCreated = (newProject: any) => {
     setProjects(prev => [...prev, newProject]);
@@ -164,7 +92,7 @@ export function ProjectsView() {
               <span className="text-xs md:text-sm font-medium text-gray-600">Team</span>
             </div>
             <p className="text-xl md:text-2xl font-bold text-gray-900 mt-2">
-              {projects.reduce((acc, p) => acc + p.teamMembers.length, 0)}
+              {projects.reduce((acc, p) => acc + (p.teamMembers?.length || 0), 0)}
             </p>
           </CardContent>
         </Card>
@@ -172,95 +100,118 @@ export function ProjectsView() {
 
       {/* Projects Grid - Mobile Optimized */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
-        {projects.map((project) => (
-          <Card key={project.id} className="hover:shadow-lg transition-shadow duration-200">
-            <CardHeader className="pb-3 md:pb-4">
-              <div className="flex items-start justify-between">
-                <div className="space-y-2 flex-1 min-w-0">
-                  <CardTitle className="text-base md:text-lg break-words">{project.name}</CardTitle>
-                  <p className="text-xs md:text-sm text-gray-600 break-words">{project.description}</p>
-                </div>
-                <Button variant="ghost" size="sm" className="ml-2 flex-shrink-0">
-                  <MoreHorizontal className="h-4 w-4" />
+        {projects.length === 0 ? (
+          <div className="col-span-full text-center py-12">
+            <div className="text-gray-400 mb-4">
+              <svg className="mx-auto h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No projects yet</h3>
+            <p className="text-gray-500 mb-4">Create your first project to get started</p>
+            <CreateProjectDialog
+              trigger={
+                <Button className="bg-blue-600 hover:bg-blue-700">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Your First Project
                 </Button>
-              </div>
-              
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant={getStatusColor(project.status)} className="text-xs">
-                  {project.status}
-                </Badge>
-                <Badge variant={getPriorityColor(project.priority)} className="text-xs">
-                  {project.priority}
-                </Badge>
-              </div>
-            </CardHeader>
-            
-            <CardContent className="space-y-3 md:space-y-4">
-              {/* Progress */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs md:text-sm">
-                  <span className="text-gray-600">Progress</span>
-                  <span className="font-medium">{project.progress}%</span>
+              }
+              onProjectCreated={handleProjectCreated}
+            />
+          </div>
+        ) : (
+          projects.map((project) => (
+            <Card key={project.id} className="hover:shadow-lg transition-shadow duration-200">
+              <CardHeader className="pb-3 md:pb-4">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-2 flex-1 min-w-0">
+                    <CardTitle className="text-base md:text-lg break-words">{project.name}</CardTitle>
+                    <p className="text-xs md:text-sm text-gray-600 break-words">{project.description}</p>
+                  </div>
+                  <Button variant="ghost" size="sm" className="ml-2 flex-shrink-0">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
                 </div>
-                <Progress value={project.progress} className="h-2" />
-              </div>
-
-              {/* Tasks and Budget - Mobile Stack */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs md:text-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Tasks</span>
-                  <span className="font-medium">
-                    {project.tasks.completed}/{project.tasks.total}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Budget</span>
-                  <span className="font-medium">
-                    ${project.budget.spent.toLocaleString()}/${project.budget.allocated.toLocaleString()}
-                  </span>
-                </div>
-              </div>
-
-              {/* Timeline - Mobile Optimized */}
-              <div className="flex items-center justify-between text-xs md:text-sm">
-                <span className="text-gray-600">Timeline</span>
-                <span className="font-medium text-right">
-                  {new Date(project.startDate).toLocaleDateString()} - {new Date(project.endDate).toLocaleDateString()}
-                </span>
-              </div>
-
-              {/* Team Members */}
-              <div className="space-y-2">
-                <span className="text-xs md:text-sm text-gray-600">Team</span>
-                <div className="flex items-center space-x-2">
-                  {project.teamMembers.slice(0, 4).map((member, index) => (
-                    <div
-                      key={index}
-                      className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-medium"
-                      title={member.name}
-                    >
-                      {member.avatar}
-                    </div>
-                  ))}
-                  {project.teamMembers.length > 4 && (
-                    <div className="w-6 h-6 md:w-8 md:h-8 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 text-xs font-medium">
-                      +{project.teamMembers.length - 4}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-1">
-                {project.tags.map((tag, index) => (
-                  <Badge key={index} variant="secondary" className="text-xs">
-                    {tag}
+                
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge variant={getStatusColor(project.status)} className="text-xs">
+                    {project.status}
                   </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                  <Badge variant={getPriorityColor(project.priority)} className="text-xs">
+                    {project.priority}
+                  </Badge>
+                </div>
+              </CardHeader>
+              
+              <CardContent className="space-y-3 md:space-y-4">
+                {/* Progress */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs md:text-sm">
+                    <span className="text-gray-600">Progress</span>
+                    <span className="font-medium">{project.progress}%</span>
+                  </div>
+                  <Progress value={project.progress} className="h-2" />
+                </div>
+
+                {/* Tasks and Budget - Mobile Stack */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs md:text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">Tasks</span>
+                    <span className="font-medium">
+                      {project.tasks?.completed || 0}/{project.tasks?.total || 0}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">Budget</span>
+                    <span className="font-medium">
+                      ${(project.budget?.spent || 0).toLocaleString()}/${(project.budget?.allocated || 0).toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Timeline - Mobile Optimized */}
+                <div className="flex items-center justify-between text-xs md:text-sm">
+                  <span className="text-gray-600">Timeline</span>
+                  <span className="font-medium text-right">
+                    {new Date(project.startDate).toLocaleDateString()} - {new Date(project.endDate).toLocaleDateString()}
+                  </span>
+                </div>
+
+                {/* Team Members */}
+                <div className="space-y-2">
+                  <span className="text-xs md:text-sm text-gray-600">Team</span>
+                  <div className="flex items-center space-x-2">
+                    {project.teamMembers?.slice(0, 4).map((member, index) => (
+                      <div
+                        key={index}
+                        className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-medium"
+                        title={member.name}
+                      >
+                        {member.avatar}
+                      </div>
+                    )) || (
+                      <span className="text-xs text-gray-500">No team members assigned</span>
+                    )}
+                    {(project.teamMembers?.length || 0) > 4 && (
+                      <div className="w-6 h-6 md:w-8 md:h-8 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 text-xs font-medium">
+                        +{(project.teamMembers?.length || 0) - 4}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1">
+                  {project.tags?.map((tag, index) => (
+                    <Badge key={index} variant="secondary" className="text-xs">
+                      {tag}
+                    </Badge>
+                  )) || <span className="text-xs text-gray-500">No tags</span>}
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   );
