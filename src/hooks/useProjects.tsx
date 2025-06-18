@@ -25,29 +25,57 @@ export const useProjects = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: projects = [], isLoading, error } = useQuery({
+  const { data: projects = [], isLoading, error, refetch } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
       console.log('Fetching projects...');
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching projects:', error);
-        throw error;
-      }
       
-      console.log('Projects fetched:', data);
-      return data as Project[];
+      if (!user) {
+        console.log('No user found, returning empty array');
+        return [];
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('projects')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error fetching projects:', error);
+          toast({
+            title: "Error Loading Projects",
+            description: "Failed to load projects. Please try again.",
+            variant: "destructive",
+          });
+          return [];
+        }
+        
+        console.log('Projects fetched:', data);
+        return data as Project[];
+      } catch (err) {
+        console.error('Unexpected error fetching projects:', err);
+        toast({
+          title: "Error Loading Projects",
+          description: "An unexpected error occurred while loading projects.",
+          variant: "destructive",
+        });
+        return [];
+      }
     },
     enabled: !!user,
+    retry: 2,
+    retryDelay: 1000,
   });
 
   const createProjectMutation = useMutation({
     mutationFn: async (newProject: Partial<Project>) => {
       console.log('Creating project:', newProject);
+      
+      if (!user) {
+        throw new Error('User must be logged in to create projects');
+      }
+
       const { data, error } = await supabase
         .from('projects')
         .insert([{
@@ -60,7 +88,7 @@ export const useProjects = () => {
 
       if (error) {
         console.error('Error creating project:', error);
-        throw error;
+        throw new Error(error.message || 'Failed to create project');
       }
       
       console.log('Project created:', data);
@@ -73,11 +101,11 @@ export const useProjects = () => {
         description: "Your project has been created successfully.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Create project error:', error);
       toast({
-        title: "Error",
-        description: "Failed to create project. Please try again.",
+        title: "Error Creating Project",
+        description: error.message || "Failed to create project. Please try again.",
         variant: "destructive",
       });
     },
@@ -86,6 +114,11 @@ export const useProjects = () => {
   const updateProjectMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: number; updates: Partial<Project> }) => {
       console.log('Updating project:', id, updates);
+      
+      if (!user) {
+        throw new Error('User must be logged in to update projects');
+      }
+
       const { data, error } = await supabase
         .from('projects')
         .update({
@@ -98,7 +131,7 @@ export const useProjects = () => {
 
       if (error) {
         console.error('Error updating project:', error);
-        throw error;
+        throw new Error(error.message || 'Failed to update project');
       }
       
       console.log('Project updated:', data);
@@ -111,11 +144,11 @@ export const useProjects = () => {
         description: "Your project has been updated successfully.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Update project error:', error);
       toast({
-        title: "Error",
-        description: "Failed to update project. Please try again.",
+        title: "Error Updating Project",
+        description: error.message || "Failed to update project. Please try again.",
         variant: "destructive",
       });
     },
@@ -124,7 +157,8 @@ export const useProjects = () => {
   return {
     projects,
     isLoading,
-    error,
+    error: error?.message || null,
+    refetch,
     createProject: createProjectMutation.mutate,
     updateProject: updateProjectMutation.mutate,
     isCreating: createProjectMutation.isPending,
