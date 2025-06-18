@@ -13,8 +13,8 @@ export interface Task {
   completed: boolean;
   due_date?: string;
   project_id?: number;
-  assignee_id?: string;
-  created_by?: string;
+  assignee_id?: number;
+  created_by?: number;
   created_at: string;
   updated_at?: string;
 }
@@ -79,7 +79,7 @@ export const useTasks = () => {
         .from('tasks')
         .insert([{
           ...newTask,
-          created_by: user?.id,
+          created_by: Number(user?.id),
           completed: false,
         }])
         .select()

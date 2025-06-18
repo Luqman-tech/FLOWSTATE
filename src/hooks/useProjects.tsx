@@ -15,7 +15,7 @@ export interface Project {
   budget_allocated?: number;
   budget_spent?: number;
   progress?: number;
-  created_by?: string;
+  created_by?: number;
   created_at: string;
   updated_at?: string;
 }
