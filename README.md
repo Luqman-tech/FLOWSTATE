@@ -1,73 +1,131 @@
-# Welcome to your Lovable project
+# FLOWSTATE
 
-## Project info
+FLOWSTATE is a modern, full-featured productivity and project management application built with React, TypeScript, Vite, Tailwind CSS, and Supabase. It is designed to help teams and individuals manage projects, tasks, goals, time tracking, and collaboration efficiently—all in a beautiful, responsive interface.
 
-**URL**: https://lovable.dev/projects/865eb99f-99c0-48a9-b581-90e3e408645d
+---
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+### 🏠 Dashboard
+- **Overview of your productivity:** See active tasks, completed items, time tracked, and team members at a glance.
+- **Quick Actions:** Instantly create tasks, schedule meetings, track time, or view reports.
+- **Recent Tasks & Projects:** Stay up to date with your most important work.
 
-**Use Lovable**
+### 📁 Project Management
+- **Create, edit, and manage projects** with details like name, description, status, priority, budget, and timeline.
+- **Project progress tracking** and visual indicators.
+- **Assign team members** and monitor project health.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/865eb99f-99c0-48a9-b581-90e3e408645d) and start prompting.
+### ✅ Task Management
+- **Create, assign, and track tasks** for yourself or your team.
+- **Set priorities, due dates, and completion status.**
+- **View tasks by project, assignee, or status.**
+- **Progress bars and completion tracking.**
 
-Changes made via Lovable will be committed automatically to this repo.
+### 🗓️ Calendar & Scheduling
+- **Integrated calendar view** for meetings, deadlines, and milestones.
+- **Schedule and manage events** directly from the dashboard.
 
-**Use your preferred IDE**
+### ⏱️ Time Tracking
+- **Track time spent** on tasks and projects.
+- **Visualize productivity trends** and time allocation.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 🎯 Goals & Progress
+- **Set and monitor goals** for yourself or your team.
+- **Visual progress indicators** and motivational feedback.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### 👥 Team Collaboration
+- **Invite and manage team members.**
+- **Assign roles and responsibilities.**
+- **Collaborate on projects and tasks in real time.**
 
-Follow these steps:
+### ⚙️ Settings & Customization
+- **Personalize your experience** with theme and notification settings.
+- **Manage account and preferences.**
 
+### 🔒 Authentication & Security
+- **Secure login and signup** powered by Supabase.
+- **Role-based access control** for teams.
+
+---
+
+## Technologies Used
+
+- **React** (with Vite for fast development)
+- **TypeScript** (type safety)
+- **Tailwind CSS** (utility-first styling)
+- **shadcn/ui** (modern UI components)
+- **Supabase** (backend, authentication, and database)
+- **Radix UI** (accessible UI primitives)
+- **React Hook Form** (form management)
+- **Recharts** (data visualization)
+- **date-fns** (date utilities)
+
+---
+
+## Getting Started
+
+### 1. Clone the repository
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
 git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+cd FLOWSTATE
 ```
 
-**Edit a file directly in GitHub**
+### 2. Install dependencies
+```sh
+npm install
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 3. Set up environment variables
+Create a `.env` file in the root of the `FLOWSTATE` directory:
+```
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
+```
+*(Replace with your actual Supabase project credentials.)*
 
-**Use GitHub Codespaces**
+### 4. Start the development server
+```sh
+npm run dev
+```
+Visit [http://localhost:5173](http://localhost:5173) in your browser.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## Project Structure
 
-This project is built with:
+- `src/components/` — Main UI components (Dashboard, Projects, Tasks, Calendar, Team, etc.)
+- `src/hooks/` — Custom React hooks for tasks, projects, authentication, and more.
+- `src/pages/` — Main application pages and routing.
+- `src/integrations/supabase/` — Supabase client and types.
+- `public/` — Static assets.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+---
 
-## How can I deploy this project?
+## Contributing
 
-Simply open [Lovable](https://lovable.dev/projects/865eb99f-99c0-48a9-b581-90e3e408645d) and click on Share -> Publish.
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/your-feature`).
+3. Commit your changes (`git commit -am 'Add new feature'`).
+4. Push to the branch (`git push origin feature/your-feature`).
+5. Create a new Pull Request.
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## License
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+This project is licensed under the MIT License.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+---
+
+## Acknowledgements
+
+- [Supabase](https://supabase.com/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- [Radix UI](https://www.radix-ui.com/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+---
+
+**FLOWSTATE** — Achieve more, together.
