@@ -52,7 +52,7 @@ export const useProjects = () => {
         .from('projects')
         .insert([{
           ...newProject,
-          created_by: user?.id,
+          created_by: Number(user?.id),
           progress: 0,
         }])
         .select()
