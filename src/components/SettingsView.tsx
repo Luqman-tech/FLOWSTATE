@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Settings, User, Bell, Shield, Palette, Globe } from 'lucide-react';
+import { FloatingActionButton } from './ui/FloatingActionButton';
 
 export function SettingsView() {
   const [notifications, setNotifications] = useState({
@@ -18,7 +19,7 @@ export function SettingsView() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
       {/* Settings Header */}
       <div>
         <h2 className="text-2xl font-bold text-blue-900 flex items-center">
@@ -49,20 +50,20 @@ export function SettingsView() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" defaultValue="John" />
+                  <Input id="firstName" value="" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" defaultValue="Doe" />
+                  <Input id="lastName" value="" />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" defaultValue="john.doe@company.com" />
+                <Input id="email" type="email" value="" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="bio">Bio</Label>
-                <Input id="bio" defaultValue="Product Manager focused on user experience" />
+                <Input id="bio" value="" />
               </div>
               <Button className="bg-blue-600 hover:bg-blue-700">Save Changes</Button>
             </CardContent>
@@ -268,6 +269,7 @@ export function SettingsView() {
           </Card>
         </TabsContent>
       </Tabs>
+      <FloatingActionButton />
     </div>
   );
 }

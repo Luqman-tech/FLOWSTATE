@@ -1,74 +1,107 @@
-# FLOWSTATE
+# FlowSphere
 
-FLOWSTATE is a modern, full-featured productivity and project management application built with React, TypeScript, Vite, Tailwind CSS, and Supabase. It is designed to help teams and individuals manage projects, tasks, goals, time tracking, and collaboration efficiently—all in a beautiful, responsive interface.
+**FlowSphere** is an AI-powered, modular, cross-platform productivity ecosystem combining task management, notes, calendar, time tracking, and collaboration. Built with React, TypeScript, Vite, Tailwind CSS, and Supabase, it's designed to help teams and individuals achieve peak productivity through intelligent automation and seamless workflows.
 
 ---
 
-## Features
+## 🚀 Core Modules
 
-### 🏠 Dashboard
-- **Overview of your productivity:** See active tasks, completed items, time tracked, and team members at a glance.
-- **Quick Actions:** Instantly create tasks, schedule meetings, track time, or view reports.
-- **Recent Tasks & Projects:** Stay up to date with your most important work.
+### 🤖 AI Copilot
+- **Context-aware assistant** that summarizes meetings, emails, and notes
+- **Intelligent task scheduling** based on priority and availability
+- **Proactive suggestions** for focus blocks and productivity optimization
+- **Natural language processing** for task creation and content generation
+- **Chat interface** with actionable insights and recommendations
 
-### 📁 Project Management
-- **Create, edit, and manage projects** with details like name, description, status, priority, budget, and timeline.
-- **Project progress tracking** and visual indicators.
-- **Assign team members** and monitor project health.
+### 📝 Notes & Knowledge Management
+- **Rich text and markdown support** with WYSIWYG editor
+- **Bi-directional linking** between notes and tasks
+- **AI-powered task extraction** from meeting notes and documents
+- **Smart tagging and nested folders** for organized knowledge
+- **Embed support** for images, files, audio, and videos
 
 ### ✅ Task Management
-- **Create, assign, and track tasks** for yourself or your team.
-- **Set priorities, due dates, and completion status.**
-- **View tasks by project, assignee, or status.**
-- **Progress bars and completion tracking.**
+- **Natural language task creation** ("Call Mom tomorrow at 5")
+- **Smart recurring tasks** with intelligent scheduling
+- **Multiple views**: List, Board (Kanban), Calendar, Timeline
+- **Priority levels, tags, and dependencies**
+- **AI-assisted task prioritization** and time estimation
 
-### 🗓️ Calendar & Scheduling
-- **Integrated calendar view** for meetings, deadlines, and milestones.
-- **Schedule and manage events** directly from the dashboard.
+### 🗓️ Calendar & Time Blocking
+- **AI-assisted time blocking** with intelligent scheduling
+- **Meeting buffer automation** and conflict resolution
+- **Drag-and-drop task-to-calendar conversion**
+- **Full calendar integration** (Google, Outlook, Apple)
+- **Smart scheduling suggestions** based on workload and priorities
 
-### ⏱️ Time Tracking
-- **Track time spent** on tasks and projects.
-- **Visualize productivity trends** and time allocation.
+### ⏱️ Focus & Time Tracking
+- **Pomodoro timer** with customizable focus sessions
+- **Distraction blocking** with browser integration
+- **Passive time tracking** for automatic task attribution
+- **Daily/weekly productivity analytics** and insights
+- **Focus mode** with ambient sounds and notifications
 
-### 🎯 Goals & Progress
-- **Set and monitor goals** for yourself or your team.
-- **Visual progress indicators** and motivational feedback.
+### 📊 Dashboard & Analytics
+- **Overview of your productivity** with AI-generated insights
+- **Quick Actions** for instant task creation and scheduling
+- **Recent activity tracking** and progress visualization
+- **Team performance metrics** and collaboration insights
+
+### 📁 Project Management
+- **Create, edit, and manage projects** with comprehensive details
+- **AI-powered project health monitoring** and risk assessment
+- **Team collaboration tools** with real-time updates
+- **Budget tracking** and resource allocation
+- **Progress visualization** with smart milestone tracking
 
 ### 👥 Team Collaboration
-- **Invite and manage team members.**
-- **Assign roles and responsibilities.**
-- **Collaborate on projects and tasks in real time.**
+- **Shared workspaces** for teams and projects
+- **Real-time collaboration** on documents and tasks
+- **Role-based access control** and permissions
+- **Team analytics** and performance insights
+- **Communication tools** with AI-powered summaries
 
 ### ⚙️ Settings & Customization
-- **Personalize your experience** with theme and notification settings.
-- **Manage account and preferences.**
-
-### 🔒 Authentication & Security
-- **Secure login and signup** powered by Supabase.
-- **Role-based access control** for teams.
+- **Modular UX** - activate only the modules you need
+- **AI personalization** based on your work patterns
+- **Theme customization** and accessibility options
+- **Integration management** for third-party services
 
 ---
 
-## Technologies Used
+## 🛠️ Technology Stack
 
-- **React** (with Vite for fast development)
-- **TypeScript** (type safety)
-- **Tailwind CSS** (utility-first styling)
-- **shadcn/ui** (modern UI components)
-- **Supabase** (backend, authentication, and database)
-- **Radix UI** (accessible UI primitives)
-- **React Hook Form** (form management)
-- **Recharts** (data visualization)
-- **date-fns** (date utilities)
+### Frontend
+- **React 18** with TypeScript for type safety
+- **Vite** for lightning-fast development and building
+- **Tailwind CSS** for utility-first styling
+- **shadcn/ui** for modern, accessible components
+- **Radix UI** for unstyled, accessible UI primitives
+
+### Backend & Database
+- **Supabase** for backend, authentication, and real-time database
+- **PostgreSQL** for structured data storage
+- **Real-time subscriptions** for live collaboration
+
+### AI & Integrations
+- **OpenAI/Anthropic APIs** for natural language processing
+- **Custom AI models** for productivity recommendations
+- **Third-party integrations** (Google Calendar, Slack, etc.)
+
+### Development Tools
+- **React Hook Form** for efficient form management
+- **React Query** for server state management
+- **Recharts** for data visualization
+- **date-fns** for date utilities
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
 ### 1. Clone the repository
 ```sh
 git clone <YOUR_GIT_URL>
-cd FLOWSTATE
+cd flowsphere
 ```
 
 ### 2. Install dependencies
@@ -77,12 +110,13 @@ npm install
 ```
 
 ### 3. Set up environment variables
-Create a `.env` file in the root of the `FLOWSTATE` directory:
-```
+Create a `.env` file in the root directory:
+```env
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
+VITE_OPENAI_API_KEY=your_openai_api_key
 ```
-*(Replace with your actual Supabase project credentials.)*
+*(Replace with your actual credentials)*
 
 ### 4. Start the development server
 ```sh
@@ -92,40 +126,77 @@ Visit [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
 
-## Project Structure
+## 🏗️ Project Structure
 
-- `src/components/` — Main UI components (Dashboard, Projects, Tasks, Calendar, Team, etc.)
-- `src/hooks/` — Custom React hooks for tasks, projects, authentication, and more.
-- `src/pages/` — Main application pages and routing.
-- `src/integrations/supabase/` — Supabase client and types.
-- `public/` — Static assets.
-
----
-
-## Contributing
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/your-feature`).
-3. Commit your changes (`git commit -am 'Add new feature'`).
-4. Push to the branch (`git push origin feature/your-feature`).
-5. Create a new Pull Request.
-
----
-
-## License
-
-This project is licensed under the MIT License.
+```
+src/
+├── components/          # UI components
+│   ├── ui/             # shadcn/ui components
+│   ├── DashboardView.tsx
+│   ├── TasksView.tsx
+│   ├── NotesView.tsx   # New AI-powered notes
+│   ├── FocusView.tsx   # New focus & time tracking
+│   ├── AICopilotView.tsx # New AI assistant
+│   └── ...
+├── hooks/              # Custom React hooks
+├── integrations/       # External service integrations
+│   └── supabase/      # Supabase client and types
+├── pages/             # Main application pages
+└── lib/               # Utility functions
+```
 
 ---
 
-## Acknowledgements
+## 🎯 Key Features
 
-- [Supabase](https://supabase.com/)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [Radix UI](https://www.radix-ui.com/)
-- [Vite](https://vitejs.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
+### AI-Powered Productivity
+- **Smart task scheduling** based on your work patterns
+- **Automatic meeting summaries** and action item extraction
+- **Intelligent time blocking** for optimal focus periods
+- **Proactive productivity insights** and recommendations
+
+### Modular Design
+- **Activate only the modules you need**
+- **Customizable workspace** to match your workflow
+- **Scalable architecture** for teams of any size
+
+### Cross-Platform
+- **Responsive design** works on desktop, tablet, and mobile
+- **Offline-first architecture** for reliability
+- **Real-time synchronization** across all devices
+
+### Privacy & Security
+- **End-to-end encryption** for sensitive data
+- **User-owned data** with export capabilities
+- **Secure authentication** with Supabase
 
 ---
 
-**FLOWSTATE** — Achieve more, together.
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgements
+
+- [Supabase](https://supabase.com/) for backend infrastructure
+- [shadcn/ui](https://ui.shadcn.com/) for beautiful components
+- [Radix UI](https://www.radix-ui.com/) for accessible primitives
+- [OpenAI](https://openai.com/) for AI capabilities
+- [Vite](https://vitejs.dev/) for fast development
+- [Tailwind CSS](https://tailwindcss.com/) for styling
+
+---
+
+**FlowSphere** — Where AI meets productivity. 🚀

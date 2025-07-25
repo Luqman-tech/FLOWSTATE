@@ -9,6 +9,9 @@ import { TimeTrackingView } from '@/components/TimeTrackingView';
 import { GoalsView } from '@/components/GoalsView';
 import { TeamView } from '@/components/TeamView';
 import { SettingsView } from '@/components/SettingsView';
+import { NotesView } from '@/components/NotesView';
+import { FocusView } from '@/components/FocusView';
+import { AICopilotView } from '@/components/AICopilotView';
 import { Button } from '@/components/ui/button';
 import { Plus, Search, Bell, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -17,7 +20,7 @@ import { useToast } from '@/hooks/use-toast';
 import { CreateTaskDialog } from '@/components/CreateTaskDialog';
 import { CreateProjectDialog } from '@/components/CreateProjectDialog';
 
-export function MainContent() {
+export function MainContent({ sidebarCollapsed }: { sidebarCollapsed: boolean }) {
   const [activeView, setActiveView] = useState('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
@@ -38,7 +41,10 @@ export function MainContent() {
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
     { id: 'tasks', label: 'Tasks', icon: '✓' },
     { id: 'projects', label: 'Projects', icon: '📁' },
+    { id: 'notes', label: 'Notes', icon: '📝' },
     { id: 'calendar', label: 'Calendar', icon: '📅' },
+    { id: 'focus', label: 'Focus', icon: '⏱️' },
+    { id: 'ai', label: 'AI Copilot', icon: '🤖' },
     { id: 'time', label: 'Time Tracking', icon: '⏱️' },
     { id: 'goals', label: 'Goals', icon: '🎯' },
     { id: 'team', label: 'Team', icon: '👥' },
@@ -51,8 +57,14 @@ export function MainContent() {
         return <TasksView />;
       case 'projects':
         return <ProjectsView />;
+      case 'notes':
+        return <NotesView />;
       case 'calendar':
         return <CalendarView />;
+      case 'focus':
+        return <FocusView />;
+      case 'ai':
+        return <AICopilotView />;
       case 'time':
         return <TimeTrackingView />;
       case 'goals':
@@ -158,7 +170,9 @@ export function MainContent() {
   }, []);
 
   return (
-    <main className="flex-1 flex flex-col bg-blue-50/30">
+    <main
+      className="flex-1 flex flex-col bg-blue-50/30 transition-all duration-200"
+    >
       {/* Enhanced Header - Mobile Optimized */}
       <header className="border-b bg-white/95 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
         <div className="flex items-center justify-between p-3 md:p-4 lg:px-6">
@@ -224,29 +238,6 @@ export function MainContent() {
           </div>
         </div>
       </header>
-
-      {/* Enhanced Navigation Tabs - Mobile Optimized */}
-      <div className="border-b bg-white border-blue-200">
-        <nav className="flex space-x-1 px-3 md:px-4 lg:px-6 overflow-x-auto scrollbar-hide">
-          {views.map((view) => (
-            <button
-              key={view.id}
-              onClick={() => setActiveView(view.id)}
-              className={`flex items-center space-x-1 md:space-x-2 py-2 md:py-3 px-2 md:px-4 border-b-2 font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap ${
-                activeView === view.id
-                  ? 'border-blue-500 text-blue-700 bg-blue-50/70'
-                  : 'border-transparent text-blue-600 hover:text-blue-800 hover:border-blue-300 hover:bg-blue-50/50'
-              }`}
-            >
-              <span className="text-sm md:text-base">{view.icon}</span>
-              <span className="hidden sm:inline">{view.label}</span>
-              <span className="sm:hidden">
-                {view.label.split(' ')[0]}
-              </span>
-            </button>
-          ))}
-        </nav>
-      </div>
 
       {/* Main Content Area - Mobile Optimized */}
       <div className="flex-1 p-3 md:p-4 lg:p-6 overflow-auto">

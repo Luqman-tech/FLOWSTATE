@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Plus, Filter, Calendar, User, MoreHorizontal, Search } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CreateTaskDialog } from '@/components/CreateTaskDialog';
+import { FloatingActionButton } from './ui/FloatingActionButton';
 
 export function TasksView() {
   const [tasks, setTasks] = useState([]);
@@ -49,7 +50,7 @@ export function TasksView() {
   };
 
   return (
-    <div className="space-y-4 md:space-y-6">
+    <div className="space-y-4 md:space-y-6 relative">
       {/* Header Actions - Mobile Optimized */}
       <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
         <div className="flex flex-col space-y-3 md:flex-row md:items-center md:space-y-0 md:space-x-4">
@@ -181,6 +182,7 @@ export function TasksView() {
           )}
         </TabsContent>
       </Tabs>
+      <FloatingActionButton />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Play, Pause, Square, Calendar, BarChart3 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { FloatingActionButton } from './ui/FloatingActionButton';
 
 export function TimeTrackingView() {
   const [isTracking, setIsTracking] = useState(false);
@@ -49,38 +50,13 @@ export function TimeTrackingView() {
     });
   };
 
-  const timeEntries = [
-    {
-      id: 1,
-      task: "Design landing page",
-      project: "Website Redesign",
-      duration: "02:30:15",
-      date: "2025-01-15",
-      status: "completed"
-    },
-    {
-      id: 2,
-      task: "User authentication",
-      project: "Mobile App",
-      duration: "01:45:30",
-      date: "2025-01-15",
-      status: "completed"
-    },
-    {
-      id: 3,
-      task: "API documentation",
-      project: "Backend API",
-      duration: "03:15:20",
-      date: "2025-01-14",
-      status: "completed"
-    }
-  ];
+  const timeEntries = [];
 
-  const todayTotal = "07:31:05";
-  const weekTotal = "42:15:30";
+  const todayTotal = "00:00:00";
+  const weekTotal = "00:00:00";
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
       {/* Time Tracker Header */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
@@ -151,6 +127,7 @@ export function TimeTrackingView() {
           </div>
         </CardContent>
       </Card>
+      <FloatingActionButton />
     </div>
   );
 }

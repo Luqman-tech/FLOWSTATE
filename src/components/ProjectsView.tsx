@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Plus, Calendar, Users, MoreHorizontal, Target, TrendingUp } from 'lucide-react';
 import { CreateProjectDialog } from '@/components/CreateProjectDialog';
+import { FloatingActionButton } from './ui/FloatingActionButton';
 
 export function ProjectsView() {
   const [projects, setProjects] = useState([]);
@@ -33,7 +34,7 @@ export function ProjectsView() {
   };
 
   return (
-    <div className="space-y-4 md:space-y-6">
+    <div className="space-y-4 md:space-y-6 relative">
       {/* Header - Mobile Optimized */}
       <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
         <div>
@@ -213,6 +214,7 @@ export function ProjectsView() {
           ))
         )}
       </div>
+      <FloatingActionButton />
     </div>
   );
 }

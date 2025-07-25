@@ -55,9 +55,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(true);
       setError(null);
       
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
       });
       
       if (error) {
@@ -92,15 +92,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(true);
       setError(null);
       
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: {
-            name: name || '',
-          },
-        },
       });
+      
+      if (!error) {
+        // Insert into your own users table
+        await supabase.from('users').insert([
+          { id: data.user.id, email: data.user.email }
+        ]);
+      }
       
       if (error) {
         const errorMessage = error.message || 'Failed to sign up';

@@ -5,54 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Target, Plus, Calendar, TrendingUp } from 'lucide-react';
+import { FloatingActionButton } from './ui/FloatingActionButton';
 
 export function GoalsView() {
-  const goals = [
-    {
-      id: 1,
-      title: "Complete 50 tasks this month",
-      description: "Focus on productivity and task completion",
-      progress: 68,
-      current: 34,
-      target: 50,
-      deadline: "2025-01-31",
-      category: "Productivity",
-      priority: "High"
-    },
-    {
-      id: 2,
-      title: "Launch new website",
-      description: "Complete website redesign and deployment",
-      progress: 45,
-      current: 45,
-      target: 100,
-      deadline: "2025-02-15",
-      category: "Project",
-      priority: "High"
-    },
-    {
-      id: 3,
-      title: "Learn new technology stack",
-      description: "Master React and TypeScript",
-      progress: 30,
-      current: 30,
-      target: 100,
-      deadline: "2025-03-01",
-      category: "Learning",
-      priority: "Medium"
-    },
-    {
-      id: 4,
-      title: "Improve team collaboration",
-      description: "Implement better communication processes",
-      progress: 75,
-      current: 75,
-      target: 100,
-      deadline: "2025-02-01",
-      category: "Team",
-      priority: "Medium"
-    }
-  ];
+  const goals = [];
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -74,7 +30,7 @@ export function GoalsView() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
       {/* Goals Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -172,6 +128,7 @@ export function GoalsView() {
           </Card>
         ))}
       </div>
+      <FloatingActionButton />
     </div>
   );
 }

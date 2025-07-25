@@ -1,224 +1,282 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { ChevronLeft, ChevronRight, Plus, Calendar, Clock } from 'lucide-react';
+import { Calendar, CalendarGrid, CalendarCell } from '@/components/ui/calendar';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Plus, Clock, Users, MapPin, Video, Sparkles, Settings } from 'lucide-react';
+import { FloatingActionButton } from './ui/FloatingActionButton';
+
+interface CalendarEvent {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  duration: number;
+  type: 'meeting' | 'task' | 'focus' | 'break';
+  attendees?: string[];
+  location?: string;
+  description?: string;
+  color: string;
+  isRecurring?: boolean;
+  recurringPattern?: string;
+}
+
+interface TimeBlock {
+  id: string;
+  title: string;
+  startTime: string;
+  endTime: string;
+  type: 'focus' | 'meeting' | 'break' | 'task';
+  priority: 'high' | 'medium' | 'low';
+  estimatedDuration: number;
+}
 
 export function CalendarView() {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [timeBlocks, setTimeBlocks] = useState<TimeBlock[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [isCreatingEvent, setIsCreatingEvent] = useState(false);
+  const [isAIScheduling, setIsAIScheduling] = useState(false);
   const [viewMode, setViewMode] = useState<'month' | 'week' | 'day'>('month');
 
-  const events = [
-    {
-      id: 1,
-      title: "Project Kickoff Meeting",
-      date: new Date(2025, 0, 15, 10, 0),
-      duration: 60,
-      type: "meeting",
-      color: "bg-blue-500"
-    },
-    {
-      id: 2,
-      title: "Design Review",
-      date: new Date(2025, 0, 17, 14, 0),
-      duration: 90,
-      type: "review",
-      color: "bg-purple-500"
-    },
-    {
-      id: 3,
-      title: "Client Presentation",
-      date: new Date(2025, 0, 20, 15, 0),
-      duration: 120,
-      type: "presentation",
-      color: "bg-green-500"
-    },
-    {
-      id: 4,
-      title: "Team Standup",
-      date: new Date(2025, 0, 22, 9, 0),
-      duration: 30,
-      type: "standup",
-      color: "bg-orange-500"
-    },
-    {
-      id: 5,
-      title: "Code Review Session",
-      date: new Date(2025, 0, 24, 11, 0),
-      duration: 45,
-      type: "review",
-      color: "bg-red-500"
-    }
-  ];
-
-  const today = new Date();
-  const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-
-  const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-  const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
-  
-  const navigateMonth = (direction: 'prev' | 'next') => {
-    const newDate = new Date(currentDate);
-    if (direction === 'prev') {
-      newDate.setMonth(newDate.getMonth() - 1);
-    } else {
-      newDate.setMonth(newDate.getMonth() + 1);
-    }
-    setCurrentDate(newDate);
+  const generateAITimeBlocks = () => {
+    // AI-powered time blocking logic would go here
+    // This would analyze tasks, priorities, and availability to suggest optimal time blocks
+    setTimeBlocks([]);
   };
 
-  const getEventsForDate = (date: number) => {
-    return events.filter(event => 
-      event.date.getDate() === date &&
-      event.date.getMonth() === currentDate.getMonth() &&
-      event.date.getFullYear() === currentDate.getFullYear()
-    );
+  const handleCreateEvent = (eventData: Partial<CalendarEvent>) => {
+    const newEvent: CalendarEvent = {
+      id: Date.now().toString(),
+      title: eventData.title || '',
+      date: eventData.date || selectedDate.toISOString().split('T')[0],
+      time: eventData.time || '09:00',
+      duration: eventData.duration || 60,
+      type: eventData.type || 'meeting',
+      color: eventData.color || '#3B82F6',
+      ...eventData,
+    };
+    setEvents([...events, newEvent]);
+    setIsCreatingEvent(false);
   };
 
-  const renderCalendarDays = () => {
-    const days = [];
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    
-    // Day headers
-    dayNames.forEach(day => {
-      days.push(
-        <div key={day} className="p-2 text-center text-sm font-medium text-gray-500 border-b">
-          {day}
-        </div>
-      );
-    });
-
-    // Empty cells for days before the first day of the month
-    for (let i = 0; i < firstDayOfMonth; i++) {
-      days.push(<div key={`empty-${i}`} className="p-2 border-b border-r"></div>);
-    }
-
-    // Calendar days
-    for (let date = 1; date <= daysInMonth; date++) {
-      const isToday = 
-        date === today.getDate() &&
-        currentDate.getMonth() === today.getMonth() &&
-        currentDate.getFullYear() === today.getFullYear();
-      
-      const dayEvents = getEventsForDate(date);
-
-      days.push(
-        <div key={date} className="p-2 border-b border-r min-h-[100px] hover:bg-gray-50 transition-colors">
-          <div className={`text-sm font-medium mb-2 ${isToday ? 'text-blue-600 font-bold' : 'text-gray-900'}`}>
-            {date}
-          </div>
-          <div className="space-y-1">
-            {dayEvents.slice(0, 2).map(event => (
-              <div
-                key={event.id}
-                className={`text-xs p-1 rounded text-white ${event.color} cursor-pointer hover:opacity-80`}
-                title={`${event.title} - ${event.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`}
-              >
-                {event.title}
-              </div>
-            ))}
-            {dayEvents.length > 2 && (
-              <div className="text-xs text-gray-500">
-                +{dayEvents.length - 2} more
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
-
-    return days;
+  const getEventsForDate = (date: Date) => {
+    const dateStr = date.toISOString().split('T')[0];
+    return events.filter(event => event.date === dateStr);
   };
 
-  const upcomingEvents = events
-    .filter(event => event.date >= today)
-    .sort((a, b) => a.date.getTime() - b.date.getTime())
-    .slice(0, 5);
+  const getTimeBlocksForDate = (date: Date) => {
+    // Filter time blocks for the selected date
+    return timeBlocks;
+  };
 
   return (
-    <div className="space-y-6">
+    <div className="h-full flex flex-col relative">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <h2 className="text-2xl font-bold text-gray-900">Calendar</h2>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" onClick={() => navigateMonth('prev')}>
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <span className="text-lg font-medium text-gray-900 min-w-[160px] text-center">
-              {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-            </span>
-            <Button variant="outline" size="sm" onClick={() => navigateMonth('next')}>
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
+      <div className="flex items-center justify-between p-6 border-b">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Calendar & Time Blocking</h2>
+          <p className="text-gray-600">AI-powered scheduling and time management</p>
         </div>
-        
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-1">
-            {(['month', 'week', 'day'] as const).map((mode) => (
-              <Button
-                key={mode}
-                variant={viewMode === mode ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setViewMode(mode)}
-                className="capitalize"
-              >
-                {mode}
-              </Button>
-            ))}
-          </div>
-          <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-            <Plus className="h-4 w-4 mr-2" />
-            New Event
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={() => setViewMode('month')}>
+            Month
           </Button>
+          <Button variant="outline" onClick={() => setViewMode('week')}>
+            Week
+          </Button>
+          <Button variant="outline" onClick={() => setViewMode('day')}>
+            Day
+          </Button>
+          <Button onClick={generateAITimeBlocks} disabled={isAIScheduling}>
+            <Sparkles className="w-4 h-4 mr-2" />
+            AI Schedule
+          </Button>
+          <Dialog open={isCreatingEvent} onOpenChange={setIsCreatingEvent}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="w-4 h-4 mr-2" />
+                New Event
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create New Event</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <Input placeholder="Event title..." />
+                <Input type="date" />
+                <Input type="time" />
+                <Input type="number" placeholder="Duration (minutes)" />
+                <div className="flex gap-2">
+                  <Button variant="outline" className="flex-1">Meeting</Button>
+                  <Button variant="outline" className="flex-1">Task</Button>
+                  <Button variant="outline" className="flex-1">Focus</Button>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button variant="outline" onClick={() => setIsCreatingEvent(false)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={() => handleCreateEvent({})}>
+                    Create Event
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Calendar */}
-        <Card className="lg:col-span-3">
-          <CardContent className="p-0">
-            <div className="grid grid-cols-7">
-              {renderCalendarDays()}
-            </div>
-          </CardContent>
-        </Card>
+      {/* Calendar Content */}
+      <div className="flex-1 p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Calendar */}
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  Calendar
+                  <div className="flex items-center gap-2 text-sm">
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-blue-500 rounded"></div>
+                      <span>Meetings</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-green-500 rounded"></div>
+                      <span>Tasks</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-purple-500 rounded"></div>
+                      <span>Focus</span>
+                    </div>
+                  </div>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => date && setSelectedDate(date)}
+                  className="rounded-md border"
+                />
+              </CardContent>
+            </Card>
+          </div>
 
-        {/* Upcoming Events */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Calendar className="h-5 w-5 text-blue-600" />
-              <span>Upcoming Events</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {upcomingEvents.map((event) => (
-              <div key={event.id} className="p-3 border rounded-lg hover:bg-gray-50 transition-colors">
-                <h4 className="font-medium text-gray-900 mb-2">{event.title}</h4>
-                <div className="space-y-1">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    {event.date.toLocaleDateString()}
+          {/* Time Blocks */}
+          <div>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  Time Blocks
+                  <Button variant="outline" size="sm">
+                    <Settings className="w-4 h-4" />
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[400px]">
+                  <div className="space-y-3">
+                    {getTimeBlocksForDate(selectedDate).map(block => (
+                      <div
+                        key={block.id}
+                        className="p-3 border rounded-lg hover:shadow-sm transition-shadow cursor-pointer"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h4 className="font-medium text-sm">{block.title}</h4>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {block.startTime} - {block.endTime}
+                            </p>
+                          </div>
+                          <Badge
+                            variant={
+                              block.priority === 'high' ? 'destructive' :
+                              block.priority === 'medium' ? 'default' : 'secondary'
+                            }
+                            className="text-xs"
+                          >
+                            {block.priority}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                          <Clock className="w-3 h-3 text-gray-400" />
+                          <span className="text-xs text-gray-500">
+                            {block.estimatedDuration} min
+                          </span>
+                          {block.type === 'meeting' && (
+                            <>
+                              <Users className="w-3 h-3 text-gray-400" />
+                              <span className="text-xs text-gray-500">Team</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Clock className="h-4 w-4 mr-2" />
-                    {event.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ({event.duration}min)
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Selected Date Events */}
+        <div className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                Events for {selectedDate.toLocaleDateString()}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {getEventsForDate(selectedDate).map(event => (
+                  <div
+                    key={event.id}
+                    className="flex items-center gap-3 p-3 border rounded-lg"
+                    style={{ borderLeftColor: event.color, borderLeftWidth: '4px' }}
+                  >
+                    <div className="flex-1">
+                      <h4 className="font-medium">{event.title}</h4>
+                      <p className="text-sm text-gray-500">
+                        {event.time} • {event.duration} min
+                      </p>
+                      {event.location && (
+                        <p className="text-sm text-gray-500 flex items-center gap-1">
+                          <MapPin className="w-3 h-3" />
+                          {event.location}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {event.type === 'meeting' && event.attendees && (
+                        <Badge variant="outline" className="text-xs">
+                          {event.attendees.length} attendees
+                        </Badge>
+                      )}
+                      {event.isRecurring && (
+                        <Badge variant="secondary" className="text-xs">
+                          Recurring
+                        </Badge>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <Badge variant="secondary" className="mt-2 capitalize">
-                  {event.type}
-                </Badge>
+                ))}
+                {getEventsForDate(selectedDate).length === 0 && (
+                  <p className="text-gray-500 text-center py-4">
+                    No events scheduled for this date
+                  </p>
+                )}
               </div>
-            ))}
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
+      <FloatingActionButton />
     </div>
   );
 }

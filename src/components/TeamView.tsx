@@ -5,60 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Users, Plus, Mail, Calendar, Activity } from 'lucide-react';
+import { FloatingActionButton } from './ui/FloatingActionButton';
 
 export function TeamView() {
-  const teamMembers = [
-    {
-      id: 1,
-      name: "Sarah Chen",
-      role: "Lead Designer",
-      email: "sarah@company.com",
-      status: "active",
-      tasksCompleted: 24,
-      currentTask: "Design landing page mockups",
-      joinDate: "2024-03-15"
-    },
-    {
-      id: 2,
-      name: "Alex Kumar",
-      role: "Full Stack Developer",
-      email: "alex@company.com",
-      status: "active",
-      tasksCompleted: 31,
-      currentTask: "Implement user authentication",
-      joinDate: "2024-02-10"
-    },
-    {
-      id: 3,
-      name: "Maria Rodriguez",
-      role: "Technical Writer",
-      email: "maria@company.com",
-      status: "active",
-      tasksCompleted: 18,
-      currentTask: "Write API documentation",
-      joinDate: "2024-04-20"
-    },
-    {
-      id: 4,
-      name: "John Smith",
-      role: "DevOps Engineer",
-      email: "john@company.com",
-      status: "away",
-      tasksCompleted: 27,
-      currentTask: "Setup CI/CD pipeline",
-      joinDate: "2024-01-08"
-    },
-    {
-      id: 5,
-      name: "Emily Davis",
-      role: "Product Manager",
-      email: "emily@company.com",
-      status: "active",
-      tasksCompleted: 15,
-      currentTask: "User feedback analysis",
-      joinDate: "2024-05-12"
-    }
-  ];
+  const teamMembers = [];
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -74,7 +24,7 @@ export function TeamView() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
       {/* Team Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -195,6 +145,7 @@ export function TeamView() {
           </Card>
         ))}
       </div>
+      <FloatingActionButton />
     </div>
   );
 }

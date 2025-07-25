@@ -1,8 +1,9 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "flowsphere",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "An AI-powered, modular, cross-platform productivity ecosystem combining task management, notes, calendar, time tracking, and collaboration.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

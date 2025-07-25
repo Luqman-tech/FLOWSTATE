@@ -4,102 +4,26 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { CalendarDays, CheckSquare, Clock, TrendingUp, Users, Target, ArrowRight, Star, Zap } from 'lucide-react';
+import { CalendarDays, CheckSquare, Clock, TrendingUp, Users, Target, ArrowRight, Star, Zap, Plus, X, Calendar, Brain } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { FloatingActionButton } from './ui/FloatingActionButton';
 
 export function DashboardView() {
   const { toast } = useToast();
 
-  const stats = [
-    {
-      title: "Active Tasks",
-      value: "24",
-      change: "+12%",
-      icon: CheckSquare,
-      color: "text-blue-600",
-      bgColor: "bg-blue-100",
-      trend: "up"
-    },
-    {
-      title: "Completed Today",
-      value: "8",
-      change: "+3",
-      icon: Target,
-      color: "text-blue-700",
-      bgColor: "bg-blue-200",
-      trend: "up"
-    },
-    {
-      title: "Time Tracked",
-      value: "6.5h",
-      change: "+1.2h",
-      icon: Clock,
-      color: "text-blue-800",
-      bgColor: "bg-blue-300",
-      trend: "up"
-    },
-    {
-      title: "Team Members",
-      value: "12",
-      change: "+2",
-      icon: Users,
-      color: "text-blue-900",
-      bgColor: "bg-blue-400",
-      trend: "up"
-    }
-  ];
+  const stats = [];
 
-  const recentTasks = [
-    { 
-      id: 1, 
-      title: "Review project proposal", 
-      priority: "High", 
-      due: "Today", 
-      status: "In Progress",
-      progress: 60,
-      assignee: "You"
-    },
-    { 
-      id: 2, 
-      title: "Update documentation", 
-      priority: "Medium", 
-      due: "Tomorrow", 
-      status: "Pending",
-      progress: 0,
-      assignee: "Sarah"
-    },
-    { 
-      id: 3, 
-      title: "Team meeting preparation", 
-      priority: "High", 
-      due: "Today", 
-      status: "Completed",
-      progress: 100,
-      assignee: "You"
-    },
-    { 
-      id: 4, 
-      title: "Client presentation", 
-      priority: "High", 
-      due: "Friday", 
-      status: "In Progress",
-      progress: 30,
-      assignee: "Team"
-    },
-  ];
+  const recentTasks = [];
 
-  const projects = [
-    { name: "Website Redesign", progress: 75, dueDate: "Dec 15", team: 5, status: "On Track", priority: "High" },
-    { name: "Mobile App", progress: 45, dueDate: "Jan 30", team: 8, status: "At Risk", priority: "High" },
-    { name: "Marketing Campaign", progress: 90, dueDate: "Dec 1", team: 3, status: "Ahead", priority: "Medium" },
-  ];
+  const projects = [];
 
-  const quickActions = [
-    { title: "Create Task", icon: CheckSquare, color: "bg-blue-500", action: "task" },
-    { title: "Schedule Meeting", icon: CalendarDays, color: "bg-blue-600", action: "meeting" },
-    { title: "Track Time", icon: Clock, color: "bg-blue-700", action: "time" },
-    { title: "View Reports", icon: TrendingUp, color: "bg-blue-800", action: "reports" },
-  ];
+  const quickActions = [];
+
+  const [fabOpen, setFabOpen] = React.useState(false);
+  const handleFabToggle = () => setFabOpen((open) => !open);
+  const handleNavigate = (viewId: string) => {
+    window.dispatchEvent(new CustomEvent('navigate', { detail: { viewId } }));
+  };
 
   const handleQuickAction = (action: string) => {
     switch (action) {
@@ -159,7 +83,7 @@ export function DashboardView() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6 rounded-2xl shadow-lg">
         <div className="flex items-center justify-between">
@@ -326,6 +250,9 @@ export function DashboardView() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Floating Action Button */}
+      <FloatingActionButton />
     </div>
   );
 }
