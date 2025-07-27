@@ -1,2 +1,3 @@
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+const SUPABASE_URL=https://vheyxiomasxjczeclivc.supabase.co
+const SUPABASE_PUBLISHABLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoZXl4aW9tYXN4amN6ZWNsaXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0MzY4MTMsImV4cCI6MjA2NDAxMjgxM30.U4l9DmE98gAFFlzSiCBkTw6ECv_0gLdVEQ5FUgMnOjc
+
